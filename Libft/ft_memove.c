@@ -6,29 +6,34 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:20:26 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/05 14:42:11 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/05 16:36:47 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include <stdio.h>
-void	ft_memmove (void *dest, const void *src, size_t n)
+
+void	ft_memmove(void *dest, const void *src, size_t n)
 {
-	unsigned char *d = (unsigned char *) dest;
-	unsigned char *s = (unsigned char *) src;
-	
+	unsigned char	*d;
+	unsigned char	*s;
+	size_t			i;
+	size_t			i;
+
+	d = (unsigned char *)dest;
+	s = (unsigned char *)src;
 	if (d < s)
 	{
-		size_t i = 0;
+		i = 0;
 		while (i < n)
 		{
 			d[i] = s[i];
 			i++;
 		}
 	}
-	else 
+	else
 	{
-		size_t i = n; 
+		i = n;
 		while (i > 0)
 		{
 			d[i - 1] = s[i - 1];
@@ -44,5 +49,5 @@ void	ft_memmove (void *dest, const void *src, size_t n)
 	buffer [12] = '\0';
 	unsigned long j = 0;
 	printf("Apres ft_memmove: %s\n", buffer);
-	return 0;
+	return (0);
 } */

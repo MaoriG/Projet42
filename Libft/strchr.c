@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   strchr.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 11:14:36 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/05 16:30:17 by mgobert          ###   ########.fr       */
+/*   Created: 2024/11/05 16:19:02 by mgobert           #+#    #+#             */
+/*   Updated: 2024/11/05 16:38:39 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_memset(void *ptr, int value, unsigned int num)
-{
-	unsigned char	*p;
-	unsigned int	i;
+#include <stddef.h>
 
-	p = (unsigned char *)ptr;
-	i = 0;
-	while (i < num)
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s != '\0')
 	{
-		p[i] = (unsigned char)value;
-		i++;
+		if (*s == (char)c)
+			return ((char *)s);
 	}
+	s++;
+	if ((char)c == '\0')
+	{
+		return ((char *)s);
+	}
+	return (NULL);
 }

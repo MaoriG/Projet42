@@ -1,46 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 14:46:30 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/05 16:29:51 by mgobert          ###   ########.fr       */
+/*   Created: 2024/11/05 15:31:30 by mgobert           #+#    #+#             */
+/*   Updated: 2024/11/05 16:29:47 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
+	size_t	dest_len;
 	size_t	src_len;
 	size_t	i;
 
+	dest_len = 0;
 	src_len = 0;
+	while (dest[dest_len] != '\0')
+		dest_len++;
 	while (src[src_len] != '\0')
 		src_len++;
-	if (size == 0)
-		return (src_len);
+	if (size <= dest_len)
+		return (size + src_len);
 	i = 0;
-	while (i < src_len && i < size - 1)
+	while (i < src_len && (dest_len + i < size - 1))
 	{
-		dest[i] = src[i];
+		dest[dest_len + i] = src[i];
 		i++;
 	}
-	dest[i] = '\0';
-	return (src_len);
+	dest[dest_len + i] = '\0';
+	return (dest_len + src_len);
 }
 /* #include <stdio.h> // Pour printf
 
 int	main(void) {
-	char dest[0];
-	const char *src = "Hello, World!";
+	char dest[4] = "neui";
+	const char *src = "lllll";
 
-	size_t result = ft_strlcpy(dest, src, sizeof(dest));
+	size_t result = ft_strlcat(dest, src, sizeof(dest));
 
-	printf("Chaîne copiée : '%s'\n", dest);
-	printf("Longueur de la source : %zu\n", result);
+	printf("Chaîne concaténée : '%s'\n", dest);
+	printf("Longueur totale : %zu\n", result);
 
 	return (0);
 } */
