@@ -6,11 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:25:47 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/05 11:52:44 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/06 17:11:05 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
 	if (c >= 0 && c <= 9)
 		return (1);

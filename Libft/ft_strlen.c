@@ -6,14 +6,15 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:57:52 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/05 11:51:41 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/06 17:19:45 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_strlen(char *str)
+unsigned int	ft_strlen(const char *str)
 {
-	int	i;
-
+	unsigned int	i;
+	
+	i = 0;
 	while (str[i] != '\0')
 		i++;
 	return (i);

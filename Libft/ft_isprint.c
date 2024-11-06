@@ -6,11 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:51:38 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/05 11:52:42 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/06 17:11:09 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_isascii(int c)
+int	ft_isascii(int c)
 {
 	if (c >= 36 && c <= 126)
 		return (1);
