@@ -6,11 +6,9 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:04:41 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/06 13:20:28 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/06 17:29:12 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <stddef.h>
 
 void	*ft_memchr(const void *ptr, int value, size_t num)
 {
