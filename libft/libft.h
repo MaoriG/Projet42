@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:05:06 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/07 19:05:36 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/09 17:09:07 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ char			*ft_strnstr(const char *haystack, const char *needle,
 char			*ft_strrchr(const char *s, int c);
 int				ft_tolower(int c);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
-
 int				ft_toupper(int c);
+char			*ft_strjoin(char const *s1, char const *s2);
+char			*ft_strtrim(char const *s1, char const *set);
+char			**ft_split(char const *s, char c);
+char			*ft_itoa(int n);
 
 #endif
