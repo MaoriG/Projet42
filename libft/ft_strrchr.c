@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:40:16 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/07 19:03:04 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/11 15:14:58 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ char	*ft_strrchr(const char *s, int c)
 {
 	int	i;
 
-	if (!s)
-		return (NULL);
 	i = ft_strlen(s);
 	while (i >= 0)
 	{

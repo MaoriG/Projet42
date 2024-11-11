@@ -6,11 +6,48 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 14:57:54 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/09 15:13:35 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/11 11:32:47 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+static void	free_tab(char **tab, size_t allocated)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < allocated)
+	{
+		free(tab[i]);
+		tab[i] = NULL;
+		i++;
+	}
+	tab = NULL;
+	return ;
+}
+
+static char	*allocate_word(char const *s, char c)
+{
+	size_t	len;
+	size_t	i;
+	char	*word;
+
+	len = 0;
+	i = 0;
+	while (s[len] && s[len] != c)
+		len++;
+	word = malloc(sizeof(char) * (len + 1));
+	if (!word)
+		return (NULL);
+	while (i < len)
+	{
+		word[i] = s[i];
+		i++;
+	}
+	word[len] = '\0';
+	return (word);
+}
 
 static size_t	count_words(char const *s, char c)
 {
@@ -28,22 +65,8 @@ static size_t	count_words(char const *s, char c)
 	return (words);
 }
 
-static void	fill_tab(char *new, char const *s, char c)
+static int	set_mem(char **tab, char const *s, char c)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i] != '\0' && s[i] != c)
-	{
-		new[i] = s[i];
-		i++;
-	}
-	new[i] = '\0';
-}
-
-static void	set_mem(char **tab, char const *s, char c)
-{
-	size_t	count;
 	size_t	i;
 	size_t	i_tab;
 
@@ -51,22 +74,23 @@ static void	set_mem(char **tab, char const *s, char c)
 	i_tab = 0;
 	while (s[i] != '\0')
 	{
-		count = 0;
-		while (s[i + count] != '\0' && s[i + count] != c)
-			count++;
-		if (count > 0)
+		if (s[i] != c)
 		{
-			tab[i_tab] = malloc(sizeof(char) * (count + 1));
+			tab[i_tab] = allocate_word(s + i, c);
 			if (!tab[i_tab])
-				return ;
-			fill_tab(tab[i_tab], (s + i), c);
+			{
+				free_tab(tab, i_tab);
+				return (0);
+			}
 			i_tab++;
-			i = i + count;
+			while (s[i] && s[i] != c)
+				i++;
 		}
 		else
 			i++;
 	}
-	tab[i_tab] = 0;
+	tab[i_tab] = NULL;
+	return (1);
 }
 
 char	**ft_split(char const *s, char c)
@@ -74,11 +98,17 @@ char	**ft_split(char const *s, char c)
 	size_t	words;
 	char	**tab;
 
+	if (!s)
+		return (NULL);
 	words = count_words(s, c);
 	tab = malloc(sizeof(char *) * (words + 1));
 	if (!tab)
 		return (NULL);
-	set_mem(tab, s, c);
+	if (!set_mem(tab, s, c))
+	{
+		free (tab);
+		return (NULL);
+	}
 	return (tab);
 }
 /*  #include <stdio.h>

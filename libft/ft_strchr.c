@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:19:02 by mgobert           #+#    #+#             */
-/*   Updated: 2024/11/07 19:02:24 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/11/11 15:03:39 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 char	*ft_strchr(const char *s, int c)
 {
-	if (c == '\0')
-		return ((char *)s);
 	while (*s != '\0')
 	{
-		if (*s == (char)c)
+		if (*s == (unsigned char)c)
 			return ((char *)s);
 		s++;
 	}
+	if ((unsigned char)c == '\0')
+		return ((char *)s);
 	return (NULL);
 }
 /*
