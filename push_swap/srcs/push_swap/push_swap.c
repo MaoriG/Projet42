@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 16:28:23 by mgobert           #+#    #+#             */
-/*   Updated: 2024/12/23 14:26:34 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/02 18:33:43 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,15 @@ int	main(int argc, char **argv)
 			sort_three(&a);
 		else
 			sort_stacks(&a, &b);
+	}
+	if (argc == 2)
+	{
+		while (argv[i])
+		{
+			free(argv[i]);
+			i++;
+		}
+		free(argv);
 	}
 	free_stack(&a);
 	return (0);

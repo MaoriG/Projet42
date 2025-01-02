@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 16:28:39 by mgobert           #+#    #+#             */
-/*   Updated: 2024/12/23 14:13:58 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/12/27 15:36:51 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,20 @@ static long	ft_atol(const char *s)
 {
 	long	result;
 	int		sign;
-	int		i;
 
 	result = 0;
 	sign = 1;
-	i = 0;
-	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[i] == '\r'
-		|| s[i] == '\f' || s[i] == '\v')
-		i++;
-	if (s[i] == '-' || s[i] == '+')
+	while (*s == ' ' || *s == '\t' || *s == '\n' || \
+			*s == '\r' || *s == '\f' || *s == '\v')
+		s++;
+	if (*s == '-' || *s == '+')
 	{
-		if (s[i] == '-')
+		if (*s == '-')
 			sign = -1;
-		i++;
+		s++;
 	}
 	while (ft_isdigit(*s))
-		result = result * 10 + (s[i++] - '0');
+		result = result * 10 + (*s++ - '0');
 	return (result * sign);
 }
 

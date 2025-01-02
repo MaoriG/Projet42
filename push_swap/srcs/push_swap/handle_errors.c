@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 16:26:34 by mgobert           #+#    #+#             */
-/*   Updated: 2024/12/23 14:27:30 by mgobert          ###   ########.fr       */
+/*   Updated: 2024/12/27 15:18:39 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,20 @@
 
 int	error_syntax(char *str_n)
 {
-	int	i;
-
-	i = 0;
-	if (!(str_n[i] == '+' || str_n[i] == '-' || (str_n[i] >= '0'
-				&& str_n[i] <= '9')))
+	if (!(*str_n == '+' || *str_n == '-' || (*str_n >= '0' && *str_n <= '9')))
 		return (1);
-	if ((str_n[i] == '+' || str_n[i] == '-') && !(str_n[i] >= '0'
-			&& str_n[i] <= '9'))
+	if ((*str_n == '+' || *str_n == '-') && !(str_n[1] >= '0'
+			&& str_n[1] <= '9'))
 		return (1);
-	while (str_n[i++])
+	while (*++str_n)
 	{
-		if (!(str_n[i] >= '0' && str_n[i] <= '9'))
+		if (!(*str_n >= '0' && *str_n <= '9'))
 			return (1);
 	}
 	return (0);
 }
 
-int	error_same_number(t_stack_node *a, int n)
+int	error_same_numbers(t_stack_node *a, int n)
 {
 	if (!a)
 		return (0);

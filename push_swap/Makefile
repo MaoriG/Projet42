@@ -11,12 +11,13 @@ INC_DIR = inc/
 SRC = $(SRC_DIR)commands/push.c \
       $(SRC_DIR)commands/rev_rotate.c \
       $(SRC_DIR)commands/rotate.c \
-      $(SRC_DIR)algorithm/sort_stacks.c \
-      $(SRC_DIR)algorithm/sort_three.c \
+      $(SRC_DIR)algo/algo_utils.c\
+      $(SRC_DIR)algo/sort_stacks.c \
+      $(SRC_DIR)algo/sort_three.c \
       $(SRC_DIR)commands/swap.c \
       $(SRC_DIR)push_swap/handle_errors.c \
-      $(SRC_DIR)push_swap/init_a_to_b.c \
-      $(SRC_DIR)push_swap/init_b_to_a.c \
+      $(SRC_DIR)push_swap/init_b.c \
+      $(SRC_DIR)push_swap/init_a.c \
       $(SRC_DIR)push_swap/push_swap.c \
       $(SRC_DIR)push_swap/split.c \
       $(SRC_DIR)push_swap/stack_init.c \
