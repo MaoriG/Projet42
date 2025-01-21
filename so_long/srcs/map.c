@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:11 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/18 18:45:25 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/21 17:43:34 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,19 @@ int get_map_size(const char *filename)
     char c;
 
     file = fopen(filename, "r");
-    if (!file) {
+    if (!file) 
+    {
         perror("Erreur d'ouverture du fichier");
         return -1;
     }
-
-    while ((c = fgetc(file)) != EOF) {
-        if (c == '\n') {
+    while ((c = fgetc(file)) != EOF) 
+    {
+        if (c == '\n')
             lines++;
-        }
     }
-
     fclose(file);
     return lines;
 }
-
-// Fonction pour lire une ligne du fichier sans le retour à la ligne
 
 char *read_line(FILE *file)
 {
@@ -45,9 +42,11 @@ char *read_line(FILE *file)
 
     line = NULL;
     i = 0;
-    while ((c = fgetc(file)) != EOF && c != '\n') {
+    while ((c = fgetc(file)) != EOF && c != '\n') 
+    {
         char *new_line = realloc(line, (i + 2) * sizeof(char));
-        if (!new_line) { 
+        if (!new_line) 
+        { 
             free(line);
             perror("Erreur d'allocation mémoire");
             return NULL;
@@ -55,38 +54,11 @@ char *read_line(FILE *file)
         line = new_line;
         line[i++] = c;
     }
-
-    if (line) {
-        line[i] = '\0';  // Ajouter un \0 pour marquer la fin de la chaîne
-    }
+    if (line)
+        line[i] = '\0';
     return line;
 }
-// Fonction qui lit le fichier et charge la carte dans un tableau de chaînes
-char **read_map(const char *filename, int map_size)
-{
-    FILE *file;
-    char **map;
-    int i;
 
-    file = fopen(filename, "r");
-    map = malloc((map_size + 1) * sizeof(char *));
-    if (!file || !map) {
-        perror("Erreur d'ouverture ou d'allocation mémoire");
-        return NULL;
-    }
-
-    for (i = 0; i < map_size; i++) {
-        map[i] = read_line(file);
-        if (!map[i]) {
-            fclose(file);
-            return NULL;
-        }
-    }
-    map[i] = NULL;
-    fclose(file);
-    return map;
-}
-// Initialisation de la carte dans la structure de données
 int init_map(t_data *data, const char *map_file)
 {
     FILE *file = fopen(map_file, "r");
@@ -94,24 +66,20 @@ int init_map(t_data *data, const char *map_file)
         perror("Erreur d'ouverture du fichier");
         return 1;
     }
-
-    // Compter le nombre de lignes
     int map_size = 0;
     char *line;
-    while ((line = read_line(file))) {
-        free(line); // Libérer la mémoire de la ligne lue
+    while ((line = read_line(file))) 
+    {
+        free(line);
         map_size++;
     }
-    rewind(file);  // Remettre le curseur au début du fichier pour le lire à nouveau
-
-    // Allouer la mémoire pour la carte
-    data->map = malloc(sizeof(char *) * (map_size + 1));  // +1 pour le dernier NULL
+    rewind(file);
+    data->map = malloc(sizeof(char *) * (map_size + 1));
     if (!data->map) {
         fclose(file);
         perror("Erreur d'allocation mémoire");
         return 1;
     }
-
     // Lire la carte ligne par ligne
     int i = 0;
     while ((data->map[i] = read_line(file))) {
@@ -129,20 +97,60 @@ int init_map(t_data *data, const char *map_file)
             if (data->map[y][x] == 'P') {
                 data->player_x = x;
                 data->player_y = y;
-                return 0;  // Le joueur a été trouvé, on peut quitter la fonction
+                break;
             }
         }
     }
 
-    return 0;  // Le joueur n'a pas été trouvé (cas exceptionnel)
+    // Compter les collectibles uniquement lors de l'initialisation
+    data->collectibles_left = count_collectibles(data);
+
+    return 0;
 }
+void check_and_place_exit(t_data *data)
+{
+    int y = 0;
+    int x = 0;
+    if (data->collectibles_left == 0 && !data->collectibles_collected) {
+        // Si tous les collectibles sont collectés mais que l'exit n'est pas encore placé
+        bool exit_found = false;
+        
+        // Vérifier si l'exit est déjà placé
+        for (y = 0; y < data->map_height; y++) {
+            for (x = 0; x < data->map_width; x++) {
+                if (data->map[y][x] == 'E') {
+                    exit_found = true;
+                    break;
+                }
+            }
+            if (exit_found) break;
+        }
+
+        // Si l'exit n'a pas encore été placé
+        if (!exit_found) {
+            // Placer l'exit à la première position libre
+            for (y = 0; y < data->map_height; y++) {
+                for (x = 0; x < data->map_width; x++) {
+                    if (data->map[y][x] == '0') {
+                        data->map[y][x] = 'E';  // Placer l'exit
+                        printf("Exit placed at (%d, %d)\n", x, y);
+                        break;
+                    }
+                }
+                if (data->map[y][x] == 'E') break;
+            }
+        }
+    }
+}
+
 
 // Fonction pour dessiner la carte à l'écran
 void draw_map(t_data *data)
 {
     int x, y;
     y = 0;
-    while (data->map[y]) {
+    while (data->map[y]) 
+    {
         x = 0;
         while (data->map[y][x]) {
             if (data->map[y][x] == '1')

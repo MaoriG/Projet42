@@ -6,45 +6,71 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:29 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/18 18:46:11 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/21 17:18:03 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int on_keypress(int keysym, t_data *data)
+int calculate_new_position(int keysym, t_data *data, int *new_x, int *new_y)
 {
-    int new_x = data->player_x;
-    int new_y = data->player_y;
+    *new_x = data->player_x;
+    *new_y = data->player_y;
 
-    // Déplacer le joueur en fonction de la touche pressée
-    if (keysym == 65307) {  // Echap
-        mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-        exit(0);
-    } else if (keysym == 119) {  // 'z' pour haut
-        new_y--;
-    } else if (keysym == 97) {   // 'q' pour gauche
-        new_x--;
-    } else if (keysym == 115) {  // 's' pour bas
-        new_y++;
-    } else if (keysym == 100) {  // 'd' pour droite
-        new_x++;
-    }
+    if (keysym == 119)
+        (*new_y)--;
+    else if (keysym == 97)
+        (*new_x)--;
+    else if (keysym == 115)
+        (*new_y)++;
+    else if (keysym == 100)
+        (*new_x)++;
 
-    // Vérifier si le nouveau mouvement est valide (case vide '0')
-    if (new_x >= 0 && new_x < data->map_width && new_y >= 0 && new_y < data->map_height) {
-        if (data->map[new_y][new_x] == '0') {  // Si la case est libre
-            data->map[data->player_y][data->player_x] = '0';  // Effacer l'ancienne position
-            data->map[new_y][new_x] = 'P';  // Placer le joueur sur la nouvelle position
-            data->player_x = new_x;  // Mettre à jour la position du joueur
+    return 0;
+}
+int update_player_position(int new_x, int new_y, t_data *data)
+{
+    if (new_x >= 0 && new_x < data->map_width && new_y >= 0 && new_y < data->map_height)
+    {
+        if (data->map[new_y][new_x] == '0' || data->map[new_y][new_x] == 'C' || (data->map[new_y][new_x] == 'E' && !count_collectibles(data)) )
+        {
+            if (data->map[new_y][new_x] == 'E' && !count_collectibles(data))
+            {
+                printf("You win! You've collected all the items and reached the exit.\n");
+                mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+                exit(0);
+            }
+            else if (data->map[new_y][new_x] == 'C') 
+            {
+                data->collectibles_left--;
+                printf("Collectible collected, remaining: %d\n", data->collectibles_left);
+            }
+            data->map[data->player_y][data->player_x] = '0';
+            data->map[new_y][new_x] = 'P';
+            data->player_x = new_x;
             data->player_y = new_y;
+            check_and_place_exit(data);
         }
     }
+    return 0;
+}
+int handle_keypress(int keysym, t_data *data)
+{
+    int new_x, new_y;
 
-    // Redessiner la carte avec le joueur déplacé
+    if (keysym == 65307) 
+    { 
+        mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+        exit(0);
+    }
+    calculate_new_position(keysym, data, &new_x, &new_y);
+    update_player_position(new_x, new_y, data);
+    check_and_place_exit(data);
     draw_map(data);
     return 0;
 }
+
+
 int on_destroy(t_data *data)
 {
     mlx_destroy_window(data->mlx_ptr, data->win_ptr);
@@ -52,4 +78,13 @@ int on_destroy(t_data *data)
     free(data->mlx_ptr);
     exit(0);
     return (0);
+}
+void collect_item(t_data *data)
+{
+    data->collectibles_left--;
+    if (data->collectibles_left == 0) 
+    {
+        data->collectibles_collected = true;
+        printf("All collectibles collected!\n");
+    }
 }

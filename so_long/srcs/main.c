@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:19 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/18 18:47:17 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/21 17:38:14 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,33 +33,52 @@ int init_image(t_data *data, char type)
 }
 int init_window(t_data *data)
 {
-    if (data->map_width <= 0 || data->map_height <= 0) {
+    if (data->map_width <= 0 || data->map_height <= 0) 
+    {
         printf("Erreur: Dimensions de la carte invalides : %d x %d\n", data->map_width, data->map_height);
         return 1;
     }
-
     data->mlx_ptr = mlx_init();
-    if (!data->mlx_ptr) {
+    if (!data->mlx_ptr) 
+    {
         printf("Erreur: Impossible d'initialiser mlx.\n");
         return 1;
     }
-
     data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * 100, data->map_height * 100, "Map Example");
-    if (!data->win_ptr) {
+    if (!data->win_ptr) 
+    {
         printf("Erreur: Impossible de créer la fenêtre.\n");
         free(data->mlx_ptr);
         return 1;
     }
-
     return 0;
 }
 
 void run_game(t_data *data)
 {
     draw_map(data);
-    mlx_hook(data->win_ptr, 2, 1L << 0, &on_keypress, data);
+    mlx_hook(data->win_ptr, 2, 1L << 0, &handle_keypress, data);
     mlx_hook(data->win_ptr, 17, 1L << 17, &on_destroy, data);
     mlx_loop(data->mlx_ptr);
+}
+
+void print_map(t_data *data)
+{
+    int y;
+    int x;
+
+    y = 0;
+    while (y < data->map_height) 
+    {
+        x = 0;
+        while (x < data->map_width) 
+        {
+            printf("%c", data->map[y][x]);
+            x++;
+        }
+        y++;
+        printf("\n");
+    }
 }
 
 int main(int argc, char **argv)
@@ -71,6 +90,8 @@ int main(int argc, char **argv)
     }
     if (init_map(&data, argv[1]) != 0)
         return 1;
+    printf("Initial Map:\n");
+    print_map(&data);
     if (init_window(&data) != 0)
         return 1;
 
