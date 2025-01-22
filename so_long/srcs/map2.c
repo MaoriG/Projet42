@@ -6,68 +6,95 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:19:21 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/21 17:33:43 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/22 12:19:57 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int verif_map (t_data *data)
+int load_map_data(t_data *data, const char *map_file)
 {
-    char **str;
-    int i;
-    int j;
+    FILE *file = fopen(map_file, "r");
+    if (!file) { perror("Erreur d'ouverture du fichier"); return 1; }
 
-    i = 0;
-    j = 0;
-    str = data->map;
-    while (str[i])
-    {
-        j = 0;
-            while (str[i][j])
-            {
-            if (str[i][j] != '0' && str[i][j] != '1' && str[i][j] != 'E' && 
-            str[i][j] != 'P' && str[i][j] != 'C')
-            return (0);
-            j++;
-            }
-        i++;
-    }
-    return (1);
-}
+    int map_size = 0;
+    char *line;
+    while ((line = read_line(file))) { free(line); map_size++; }
+    rewind(file);
 
-void free_map(t_data *data) 
-{
-    if (data->map) {
-        for (int i = 0; data->map[i] != NULL; i++) {
-            free(data->map[i]);
-        }
-        free(data->map);
-    }
-}
+    data->map = malloc(sizeof(char *) * (map_size + 1));
+    if (!data->map) { fclose(file); perror("Erreur d'allocation mémoire"); return 1; }
 
-/* char **read_map(const char *filename, int map_size)
-{
-    FILE *file;
-    char **map;
-    int i;
-
-    file = fopen(filename, "r");
-    map = malloc((map_size + 1) * sizeof(char *));
-    i = 0;
-    if (!file) {
-        perror("Erreur d'ouverture du fichier");
-        return NULL;
-    }
-    while (i < map_size) {
-        map[i] = read_line(file);
-        if (!map[i]) {
-            fclose(file);
-            return NULL;
-        }
-        i++;
-    }
-    map[i] = NULL;
+    int i = 0;
+    while ((data->map[i] = read_line(file))) i++;
     fclose(file);
-    return map;
-} */
+
+    data->map_width = strlen(data->map[0]);
+    data->map_height = map_size;
+    return 0;
+}
+
+int find_player_and_collectibles(t_data *data)
+{
+    int y = 0, x = 0;
+    while (y < data->map_height) {
+        x = 0;
+        while (x < data->map_width) {
+            if (data->map[y][x] == 'P') { data->player_x = x; data->player_y = y; return 0; }
+            x++;
+        }
+        y++;
+    }
+    data->collectibles_left = count_collectibles(data);
+    return 0;
+}
+
+void draw_map(t_data *data)
+{
+    int x, y;
+    y = 0;
+    while (data->map[y]) 
+    {
+        x = 0;
+        while (data->map[y][x]) {
+            if (data->map[y][x] == '1')
+                init_image(data, '1');
+            else if (data->map[y][x] == '0')
+                init_image(data, '0');
+            else if (data->map[y][x] == 'C')
+                init_image(data, 'C');
+            else if (data->map[y][x] == 'E')
+                init_image(data, 'E');
+            else if (data->map[y][x] == 'P')
+                init_image(data, 'P');
+            
+            int pixel_x = x * 100;
+            int pixel_y = y * 100;
+            mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, pixel_x, pixel_y);
+            x++;
+        }
+        y++;
+    }
+}
+int count_collectibles(t_data *data)
+{
+    int count = 0;
+    int y;
+    int x;
+    
+    count = 0;
+    y = 0;
+    x = 0;
+    while (y < data->map_height) 
+    {
+        x = 0;
+        while ( x < data->map_width) 
+        {
+            if (data->map[y][x] == 'C')
+                count++;
+            x++;
+        }
+        y++;
+    }
+    return count;
+}

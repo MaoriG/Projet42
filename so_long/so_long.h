@@ -25,12 +25,18 @@ typedef struct s_data {
 	int		player_y;
     int     collectibles_left;
     bool    collectibles_collected;
+    int     steps;
 } t_data;
 
 typedef struct s_position {
     int x;
     int y;
 } t_position;
+
+typedef struct {
+    int x;
+    int y;
+} t_point;
 
 int on_destroy(t_data *data);
 void draw_map(t_data *data);
@@ -43,8 +49,15 @@ int verif_map (t_data *data);
 void free_map(t_data *data);
 int handle_keypress(int keysym, t_data *data);
 bool is_exit_reachable(t_data *data);
-void check_and_place_exit(t_data *data);
 bool is_map_rectangular(t_data *data);
 int count_collectibles(t_data *data);
 void collect_item(t_data *data);
+char *read_line(FILE *file);
+int init_map(t_data *data, const char *map_file);
+int load_map_data(t_data *data, const char *map_file);
+int find_player_and_collectibles(t_data *data);
+void fill(char **tab, t_point size, t_point cur, char to_fill);
+int verif_access (t_data *data, int y, int x);
+int is_accessible(t_data *data);
+void count_steps(t_data *data);
 #endif

@@ -6,12 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:19 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/21 17:38:14 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/21 18:59:18 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
-
 
 int init_image(t_data *data, char type)
 {
