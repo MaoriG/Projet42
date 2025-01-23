@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:11 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/22 12:52:21 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:34:19 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,24 @@ int read_map_file(t_data *data, const char *map_file)
     int map_size;
     char *line;
     int i;
-    
+
     file = fopen(map_file, "r");
     map_size = 0;
     line = NULL;
     i = 0;
-    if (!file) { perror("Erreur d'ouverture du fichier"); return 1; }
+    if (!file) 
+    {
+        perror("Erreur d'ouverture du fichier");
+        return 1;
+    }
     while ((line = read_line(file))) { free(line); map_size++; }
     rewind(file);
     data->map = malloc(sizeof(char *) * (map_size + 1));
-    if (!data->map) { fclose(file); perror("Erreur d'allocation mémoire"); return 1; }
+    if (!data->map) {
+        fclose(file);
+        perror("Erreur d'allocation mémoire");
+        return 1;
+    }
     while ((data->map[i] = read_line(file))) i++;
     data->map[i] = NULL;
     fclose(file);
@@ -110,7 +118,11 @@ int init_map(t_data *data, const char *map_file)
 {
     if (read_map_file(data, map_file))
         return (1);
-    if (!is_accessible(data))
+    if (ft_count_map_parameters(data))
+        return (1);
+    if (!check_accessibility(data))
+        return (1);
+    if (ft_check_col(data))
         return (1);
     if (initialize_game(data))
         return (1);

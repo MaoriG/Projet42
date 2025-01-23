@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:29 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/22 12:56:36 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:32:17 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,21 @@ int handle_keypress(int keysym, t_data *data)
     return 0;
 }
 
-
 int on_destroy(t_data *data)
 {
+    // Libérer la mémoire de la carte
+    if (data->map) {
+        for (int i = 0; i < data->map_height; i++) {
+            free(data->map[i]);
+        }
+        free(data->map);
+    }
+
+    // Libérer la mémoire de mlx
     mlx_destroy_window(data->mlx_ptr, data->win_ptr);
     mlx_destroy_display(data->mlx_ptr);
     free(data->mlx_ptr);
+
     exit(0);
     return (0);
 }
