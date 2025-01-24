@@ -6,64 +6,41 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:11 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/24 18:39:18 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/25 00:04:11 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int get_map_size(const char *filename)
+char	*read_line(int fd)
 {
-	FILE *file;
-	int lines = 0;
-	char c;
+	char	*line;
+	int		i;
+	char	*c;
+	int		len;
 
-	file = fopen(filename, "r");
-	if (!file) 
-	{
-		perror("Erreur d'ouverture du fichier");
-		return -1;
-	}
-	while ((c = fgetc(file)) != EOF) 
-	{
-		if (c == '\n')
-			lines++;
-	}
-	fclose(file);
-	return lines;
-}
-// malloc ma ligne dans le tableau sans \n
-char *read_line(int fd)
-{
-	char *line;
-	int i;
-	char *c;
-	int	len;
-
-	
 	line = NULL;
 	i = 0;
-	c = get_next_line(fd);// on recup la ligne avec \n
+	c = get_next_line(fd);
 	len = ft_strlen(c);
 	if (c[len - 1] != '\n')
 		len++;
-	line = ft_calloc(len, sizeof(char) + 1);// on malloc la ligne sans le \n;
-	if (!line)// verfif malloc
+	line = ft_calloc(len, sizeof(char) + 1);
+	if (!line)
 		return (free(line), perror("Erreur d'allocation mémoire"), NULL);
 	else
-		ft_strlcpy(line, c, len);// copie sans \n;
+		ft_strlcpy(line, c, len);
 	free(c);
-	return line;
+	return (line);
 }
 
 void	ft_count_line(t_data *data, int fd)
 {
-	char *line;
-	bool flag;
-	
+	char	*line;
+	bool	flag;
+
 	data->map_height = 0;
 	flag = true;
-
 	while (flag)
 	{
 		line = get_next_line(fd);
@@ -76,76 +53,76 @@ void	ft_count_line(t_data *data, int fd)
 	get_next_line(-42);
 }
 
-// malloc la map dans un un tableau de pointeur
-int read_map_file(t_data *data, const char *map_file)
+int	read_map_file(t_data *data, const char *map_file)
 {
-	int file;
-	int map_size;
-	char *line;
-	int i;
+	int		file;
+	int		map_size;
+	char	*line;
+	int		i;
 
 	file = open(map_file, O_RDONLY);
 	map_size = 0;
 	line = NULL;
-	if (file < 0)// fail open
-		return (perror("Erreur d'ouverture du fichier"), 1);
-	ft_count_line(data, file);// compte la hauteur du futur tableau
+	if (file < 0)
+		return (ft_printf("Erreur d'ouverture du fichier"), 1);
+	ft_count_line(data, file);
 	close(file);
 	file = open(map_file, O_RDONLY);
-	data->map = ft_calloc(sizeof(char *), (data->map_height + 1));// malloc le tableau
-	
-	if (!data->map)// on verif le malloc
+	data->map = ft_calloc(sizeof(char *), (data->map_height + 1));
+	if (!data->map)
 		return (close(file), perror("Erreur d'allocation mémoire"), 1);
 	i = 0;
-	while (i < data->map_height)// malloc chaque ligne du tableau
+	while (i < data->map_height)
 	{
 		data->map[i] = read_line(file);
 		i++;
 	}
-	get_next_line(-42);
-	close(file);
 	data->map_width = ft_strlen(data->map[0]);
-	return 0;
+	return (get_next_line(-42), close(file), 0);
 }
-int initialize_game(t_data *data)
+
+int	initialize_game(t_data *data)
 {
-	int y = 0, x = 0;
-	
-	// Trouve la position du joueur
-	while (y < data->map_height) {
+	int	y;
+	int	x;
+
+	y = 0;
+	x = 0;
+	while (y < data->map_height)
+	{
 		x = 0;
-		while (x < data->map_width) {
-			if (data->map[y][x] == 'P') 
-			{ 
-				data->player_x = x; 
-				data->player_y = y; 
-				break;
+		while (x < data->map_width)
+		{
+			if (data->map[y][x] == 'P')
+			{
+				data->player_x = x;
+				data->player_y = y;
+				break ;
 			}
 			x++;
 		}
-		if (x < data->map_width) break; // Trouvé
+		if (x < data->map_width)
+			break ;
 		y++;
 	}
-	// Initialiser les autres éléments du jeu comme les collectibles
 	data->collectibles_left = count_collectibles(data);
 	data->steps = 0;
-
-	return 0;
+	return (0);
 }
 
-int init_map(t_data *data, const char *map_file)
+int	init_map(t_data *data, const char *map_file)
 {
-	if (read_map_file(data, map_file))// fais  le tableau
-		return (1);
-	if (ft_count_map_parameters(data))// verif parametres
-		return (1);
+	if (read_map_file(data, map_file))
+		return (ft_free_all(data), 1);
+	if (ft_count_map_parameters(data))
+		return (ft_free_all(data), 1);
 	if (!check_accessibility(data))
-		return (1);
+		return (ft_free_all(data), 1);
 	if (ft_check_col(data))
-			return (1);
+		return (ft_free_all(data), 1);
 	if (initialize_game(data))
-		return (1);
+		return (ft_free_all(data), 1);
 	if (find_player_and_collectibles(data))
-		return (1);
-	return 0;
+		return (ft_free_all(data), 1);
+	return (0);
 }

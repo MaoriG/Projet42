@@ -6,25 +6,27 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:30:38 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/24 17:37:09 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/25 00:03:05 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-void count_steps(t_data *data)
+void	count_steps(t_data *data)
 {
-    static int i;
+	static int	i;
 
-    data->steps = i;
-    data->steps++;
-    printf ("steps : %d", data->steps);
+	data->steps = i;
+	data->steps++;
+	ft_printf("steps : %d", data->steps);
 }
+
 int	ft_check_format(t_data *data)
 {
-	int		y;
-	int		x;
-	int		count_x;
+	int	y;
+	int	x;
+	int	count_x;
+
 	x = 0;
 	y = 0;
 	count_x = 0;
@@ -36,67 +38,69 @@ int	ft_check_format(t_data *data)
 			x++;
 		if (x != count_x)
 		{
-			printf("Error\nMap must be a rectangle or a square\n");
+			ft_printf("Error\nMap must be a rectangle or a square\n");
 			return (0);
 		}
 		x = 0;
 		y++;
 	}
 	return (1);
-} 
+}
 
 int	ft_check_col(t_data *data)
 {
-    int count = 0;
-    int y;
-    int x;
-    
-    count = 0;
-    y = 0;
-    x = 0;
-    while (y < data->map_height) 
-    {
-        x = 0;
-        while ( x < data->map_width) 
-        {
-            if (data->map[y][0] != '1' || data->map[y][data->map_width - 1] != '1' ||
-                data->map[data->map_height - 1][x] != '1' || data->map[0][x] != '1')
+	int	count;
+	int	y;
+	int	x;
 
-            {  
-                printf("Error\nMap column not close\n");
-                return (1);
-            }
-            x++;
-        }
-        y++;
-    }
+	count = 0;
+	count = 0;
+	y = 0;
+	x = 0;
+	while (y < data->map_height)
+	{
+		x = 0;
+		while (x < data->map_width)
+		{
+			if (data->map[y][0] != '1' || data->map[y][data->map_width
+				- 1] != '1' || data->map[data->map_height - 1][x] != '1'
+				|| data->map[0][x] != '1')
+			{
+				ft_printf("Error\nMap column not close\n");
+				return (1);
+			}
+			x++;
+		}
+		y++;
+	}
 	return (0);
 }
-int ft_count_map_parameters(t_data *data)
-{
-    int x;
-    int y;
 
-    y = 0;
-    while (y < data->map_height) 
-    {
-        x = 0;
-        while (x < data->map_width) 
-        {
-            if (data->map[y][x] == 'E') 
-                data->exit = 1;
-            else if (data->map[y][x] == 'C') 
-                data->collectibles = 1;
-            else if (data->map[y][x] == 'P') 
-                data->player = 1;
-            x++;
-        }
-        y++;
-    }
-    if (data->exit == 0 || data->collectibles == 0 || data->player == 0)
-    {
-        printf("Erreur : il manque un élément dans la carte.\n");
-        return 1; // Indique qu'il y a une erreur
-    }
-    return 0; // Tout est bon
+int	ft_count_map_parameters(t_data *data)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < data->map_height)
+	{
+		x = 0;
+		while (x < data->map_width)
+		{
+			if (data->map[y][x] == 'E')
+				data->exit = 1;
+			else if (data->map[y][x] == 'C')
+				data->collectibles = 1;
+			else if (data->map[y][x] == 'P')
+				data->player = 1;
+			x++;
+		}
+		y++;
+	}
+	if (data->exit == 0 || data->collectibles == 0 || data->player == 0)
+	{
+		ft_printf("Error\nan element is missing from the map\n");
+		return (1);
+	}
+	return (0);
 }

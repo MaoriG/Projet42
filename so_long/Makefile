@@ -5,7 +5,7 @@ NAME = so_long
 LIBFT = ./libft/libft.a
 FT_PRINTF = ./printf/libftprintf.a
 MLX = ./minilibx/libmlx.a
-GNL = ./get_next_line/get_next_line.a  # Bibliothèque statique de get_next_line
+GNL = ./get_next_line/get_next_line.a
 SRC_DIR = ./srcs/
 INC_DIR = inc/
 
@@ -13,10 +13,11 @@ INC_DIR = inc/
 SRC = $(SRC_DIR)main.c \
       $(SRC_DIR)hook.c \
       $(SRC_DIR)map.c \
-	  $(SRC_DIR)utils.c \
-	  $(SRC_DIR)map2.c \
-	  $(SRC_DIR)set.c \
-	  $(SRC_DIR)free_all.c \
+      $(SRC_DIR)utils.c \
+      $(SRC_DIR)map2.c \
+      $(SRC_DIR)set.c \
+      $(SRC_DIR)free_all.c \
+      $(SRC_DIR)utils2.c
 
 # Fichiers objets correspondants
 OBJ = $(SRC:.c=.o)
@@ -30,19 +31,41 @@ RM = rm -f
 # Cible par défaut
 all: $(NAME)
 
-# Règle pour créer l'exécutable
+# Créer l'exécutable
 $(NAME): $(OBJ) $(LIBFT) $(FT_PRINTF) $(MLX) $(GNL)
+	@echo "🔨 Linking $(NAME)..."
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(FT_PRINTF) $(GNL) $(MLX_FLAGS) -o $(NAME)
 
 # Règle pour compiler les fichiers objets
 %.o: %.c
+	@echo "💻 Compiling $<"
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Règles pour nettoyer les fichiers objets et l'exécutable
+# Nettoyer les fichiers objets
 clean:
+	@echo "🧹 Cleaning object files..."
 	$(RM) $(OBJ)
 
+# Supprimer les objets et l'exécutable
 fclean: clean
+	@echo "🧼 Cleaning everything..."
 	$(RM) $(NAME)
 
+# Recompiler tout
 re: fclean all
+
+# Règle pour générer la bibliothèque libft
+$(LIBFT):
+	make -C ./libft
+
+# Règle pour générer la bibliothèque libftprintf
+$(FT_PRINTF):
+	make -C ./printf
+
+# Règle pour générer la bibliothèque get_next_line
+$(GNL):
+	make -C ./get_next_line
+
+# Règle pour générer la bibliothèque minilibx
+$(MLX):
+	make -C ./minilibx
