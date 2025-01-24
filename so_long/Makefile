@@ -16,13 +16,14 @@ SRC = $(SRC_DIR)main.c \
 	  $(SRC_DIR)utils.c \
 	  $(SRC_DIR)map2.c \
 	  $(SRC_DIR)set.c \
+	  $(SRC_DIR)free_all.c \
 
 # Fichiers objets correspondants
 OBJ = $(SRC:.c=.o)
 
 # Compilateur et flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I./minilibx
+CFLAGS = -Wall -Wextra -Werror -g -I$(INC_DIR) -I./minilibx -I ./libft
 MLX_FLAGS = -L./minilibx -lmlx -lXext -lX11
 RM = rm -f
 
@@ -40,16 +41,8 @@ $(NAME): $(OBJ) $(LIBFT) $(FT_PRINTF) $(MLX) $(GNL)
 # Règles pour nettoyer les fichiers objets et l'exécutable
 clean:
 	$(RM) $(OBJ)
-	make clean -C ./libft
-	make clean -C ./printf
-	make clean -C ./get_next_line
-	make clean -C ./minilibx
 
 fclean: clean
 	$(RM) $(NAME)
-	make fclean -C ./libft
-	make fclean -C ./printf
-	make fclean -C ./get_next_line
-	make clean -C ./minilibx
 
 re: fclean all

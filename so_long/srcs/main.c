@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:19 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/23 19:34:38 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/24 19:10:42 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,26 @@ int init_image(t_data *data, char type)
 }
 int init_window(t_data *data)
 {
-    if (data->map_width <= 0 || data->map_height <= 0) {
+    if (data->map_width <= 0 || data->map_height <= 0) 
+    {
         printf("Erreur: Dimensions de la carte invalides : %d x %d\n", data->map_width, data->map_height);
         return 1;
     }
-
     data->mlx_ptr = mlx_init();
-    if (!data->mlx_ptr) {
+    if (!data->mlx_ptr) 
+    {
         printf("Erreur: Impossible d'initialiser mlx.\n");
         return 1;
     }
     data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * 100, data->map_height * 100, "Map Example");
-    if (!data->win_ptr) {
+    if (!data->win_ptr) 
+    {
         printf("Erreur: Impossible de créer la fenêtre.\n");
         free(data->mlx_ptr);
         return 1;
     }
     return 0;
 }
-
 
 void run_game(t_data *data)
 {

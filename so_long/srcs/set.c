@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 19:30:38 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/23 15:57:06 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/24 17:37:09 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	ft_check_format(t_data *data)
 	int		y;
 	int		x;
 	int		count_x;
-
 	x = 0;
 	y = 0;
 	count_x = 0;

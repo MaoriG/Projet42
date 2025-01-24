@@ -25,7 +25,7 @@ typedef struct s_data
 {
     void    *mlx_ptr;
     void    *win_ptr;
-	void 	*img_ptr;
+	void 	*img_ptr;// ok pour free
     int     img_width;
     int     img_height;
     char    **map;
@@ -56,7 +56,7 @@ char	*get_next_line(int fd);
 int init_image(t_data *data, char type);
 int handle_keypress(int keysym, t_data *data);
 int count_collectibles(t_data *data);
-char *read_line(FILE *file);
+char *read_line(int fd);
 int init_map(t_data *data, const char *map_file);
 int load_map_data(t_data *data, const char *map_file);
 int find_player_and_collectibles(t_data *data);
@@ -68,4 +68,9 @@ int	ft_check_col(t_data *data);
 int	ft_count_map_parameters(t_data *data);
 int ft_verif_map_par(t_data *data);
 bool check_accessibility(t_data *data);
+void    ft_free_all(t_data *data);
+
+// for free
+void    ft_free_all(t_data *data);
+
 #endif

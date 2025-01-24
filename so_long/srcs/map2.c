@@ -6,38 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:19:21 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/23 19:33:52 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/24 17:43:35 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
-
-int load_map_data(t_data *data, const char *map_file)
-{
-    FILE *file = fopen(map_file, "r");
-    if (!file) {
-        perror("Erreur d'ouverture du fichier");
-        return 1;
-    }
-
-    int map_size = 0;
-    char *line;
-    while ((line = read_line(file))) { free(line); map_size++; }
-    rewind(file);
-
-    data->map = malloc(sizeof(char *) * (map_size + 1));
-    if (!data->map) {
-        fclose(file);
-        perror("Erreur d'allocation mémoire");
-        return 1;
-    }
-    int i = 0;
-    while ((data->map[i] = read_line(file))) i++;
-    fclose(file);
-    data->map_width = strlen(data->map[0]);
-    data->map_height = map_size;
-    return 0;
-}
 
 int find_player_and_collectibles(t_data *data)
 {
@@ -75,6 +48,7 @@ void draw_map(t_data *data)
             int pixel_x = x * 100;
             int pixel_y = y * 100;
             mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, pixel_x, pixel_y);
+            mlx_destroy_image(data->mlx_ptr, data->img_ptr);
             x++;
         }
         y++;
