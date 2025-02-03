@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/29 16:49:21 by mgobert           #+#    #+#             */
+/*   Updated: 2025/01/29 16:49:42 by mgobert          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
@@ -26,7 +38,7 @@ typedef struct s_data
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	void *img_ptr; // ok pour free
+	void	*img_ptr;
 	int		img_width;
 	int		img_height;
 	char	**map;
@@ -81,5 +93,6 @@ void		print_visited(t_data *data, bool **visited);
 bool		are_elements_accessible(t_data *data, bool **visited, int y, int x);
 void		steps_track(t_data *data);
 bool		check_accessibility(t_data *data);
+int			ft_check_format(t_data *data);
 
 #endif

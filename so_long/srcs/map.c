@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:11 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/25 00:04:11 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/29 16:46:24 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ int	initialize_game(t_data *data)
 int	init_map(t_data *data, const char *map_file)
 {
 	if (read_map_file(data, map_file))
+		return (ft_free_all(data), 1);
+	if (!ft_check_format(data))
 		return (ft_free_all(data), 1);
 	if (ft_count_map_parameters(data))
 		return (ft_free_all(data), 1);

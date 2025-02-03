@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:10:29 by mgobert           #+#    #+#             */
-/*   Updated: 2025/01/24 23:29:22 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/01/29 16:43:01 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	update_player_position(int new_x, int new_y, t_data *data)
 
 void	help_position_player(t_data *data)
 {
-	printf("You win! You've collected all the items and reached the exit.\n");
+	ft_printf("You win!\n");
 	ft_free_all(data);
 	on_destroy(data);
 	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
