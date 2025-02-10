@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/03 17:57:43 by mgobert           #+#    #+#             */
-/*   Updated: 2025/02/10 18:39:24 by mgobert          ###   ########.fr       */
+/*   Created: 2025/02/10 19:53:26 by mgobert           #+#    #+#             */
+/*   Updated: 2025/02/10 19:59:24 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-int main (int ac, char **av)
+void	data_init (t_table *table)
 {
-    t_table table;
-    
-    if (ac == 5 || ac == 6)
-    {
-        parse_input (&table, av);
-        data_init (&table);
-        dinner_start(&table);
-        clean(&table);
-    }
-    else
-    {
-        error_exit("Wrong input\n"
-        GREEN"correct is ./philo 2 800 200 200 [5]");
-    }
+	table->end_simulation = false;
+	table->philos = safe_malloc(table->philo_nbr);
+	
 }

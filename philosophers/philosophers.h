@@ -6,47 +6,81 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:14:29 by mgobert           #+#    #+#             */
-/*   Updated: 2025/02/03 19:12:06 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/02/10 20:47:47 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
-#include <pthread.h>
-#include "./printf/ft_printf.h"
-#include <stdbool.h>
+# include "./printf/ft_printf.h"
+# include <limits.h>
+# include <pthread.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <sys/time.h>
+# include <unistd.h>
+#include <errno.h>
 
- typedef	struct        s_arg             //arguments after ./philo
-{
-	int                   total;            // number of philosophers
-	int                   die_time;              // time to die in milliseconds
-	int                   eat_time;              // time to eat in milliseconds
-	int                   sleep_time;            // time to sleep in milliseconds
-	int                   m_eat;            // must eat m_eat times
-	long int              start_t;          // start time in milliseconds
-	pthread_mutex_t       write_mutex;      // write mutex
-	int                   nb_p_finish;      // when a philosopher ate m_eat times : nb_p_finish++
-	int                   stop;             // 0 if none philosopher is dead, 1 if a philosopher is dead, 2 if all philosophers ate m_eat times
-}                       t_arg;
+# define RST 		"0\33[0m"
+# define RED 		"\033[1;31m"
+# define GREEN 		"\033[1;32m"
+# define YELLOW 	"\033[1;33m"
+# define BLUE 		"\033[1;34m"
+# define MAGENTA 	"\033[1;35m"
+# define CYAN 		"\033[1;36m"
+# define WHITE 		"\033[1;37m"
 
-typedef	struct          s_philo
-{
-	int                   id;               // id of the philosopher
-	pthread_t             thread_id;        // thread id
-	pthread_t             thread_death_id;  // id of the thread monitoring death
-	pthread_mutex_t       *r_f;             // right fork mutex
-	pthread_mutex_t       l_f;              // left fork mutex
-	t_arg                 *pa;              // pointer to structure with all arguments (pointer on a)
-	long int              ms_eat;           // time of the last dinner in milliseconds
-	unsigned int          nb_eat;           // number of dinners (each time the philosopher eats nb_eat++)
-	int                   finish;           // 1 when a philosopher ate m_eat times, if not, 0
-}                       t_philo;
+typedef pthread_mutex_t	t_mtx;
+typedef struct s_table	t_table;
 
-typedef	struct          s_p
+typedef enum e_opcode
 {
-	t_philo               *ph;          
-	t_arg                 a;                
-} 					t_p;
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}	t_opcode;
+
+typedef struct s_fork
+{
+	t_mtx				fork;
+	int					fork_id;
+}						t_fork;
+
+typedef struct s_philo
+{
+	int					id;
+	long				meals_counter;
+	bool				full;
+	long				last_meal_time;
+	t_fork				*left_fork;
+	t_fork				*right_fork;
+	pthread_t			thread_id;
+	t_table				*table;
+}						t_philo;
+
+struct					s_table
+{
+	long				philo_nbr;
+	long				time_to_die;
+	long				time_to_eat;
+	long				time_to_sleep;
+	long				nbr_limit_meals;
+	long				start_simulation;
+	bool				end_simulation;
+	t_fork				*forks;
+	t_philo				*philos;
+};
+
+void    error_exit(const char *error);
+void	parse_input (t_table *table, char **av);
+void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data,
+ t_opcode opcode);
+void	*safe_malloc(size_t bytes);
+void safe_mutex_handle(t_mtx *mutex, t_opcode opcode);
 
 #endif

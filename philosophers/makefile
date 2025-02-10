@@ -8,6 +8,8 @@ SRC_DIR = ./srcs/
 
 # Fichiers source
 SRC = $(SRC_DIR)main.c \
+$(SRC_DIR)utils.c \
+$(SRC_DIR)parsing.c \
 # Fichiers objets correspondants
 OBJ = $(SRC:.c=.o)
 
