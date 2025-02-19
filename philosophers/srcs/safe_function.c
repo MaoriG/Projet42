@@ -6,11 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:55:38 by mgobert           #+#    #+#             */
-/*   Updated: 2025/02/10 20:46:25 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/02/16 16:07:14 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <../philosophers.h>
+#include "../philosophers.h"
 
 static void handle_thread_error(int status, t_opcode opcode)
 {
