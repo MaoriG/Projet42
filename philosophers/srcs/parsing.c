@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:40:08 by mgobert           #+#    #+#             */
-/*   Updated: 2025/02/10 19:46:26 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/02/24 19:42:09 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static inline bool is_space (char c)
 {
-	return (c > 9 && c <= 13 || c == 32);
+	return ((c > 9 && c <= 13) || c == 32);
 }
 
 static const char *valid_input(const char *str)

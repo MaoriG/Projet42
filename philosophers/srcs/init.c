@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:53:26 by mgobert           #+#    #+#             */
-/*   Updated: 2025/02/19 18:16:03 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/02/24 16:05:19 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 static void	assign_forks(t_philo *philo, t_fork *forks, int p_position)
 {
-	if (!forks)
-		error_exit("Forks array is NULL");
 	int	philo_nbr;
 
 	philo_nbr = philo->table->philo_nbr;
-	philo->first_fork = &forks[p_position];
-	philo->second_fork = &forks[(p_position + 1) % philo_nbr];
-	if (philo->id % 2)
+	philo->second_fork = &forks[p_position];
+	philo->first_fork = &forks[(p_position + 1) % philo_nbr];
+	if (philo->id % 2 == 0)
 	{
 		philo->first_fork = &forks[p_position];
 		philo->second_fork = &forks[(p_position + 1) % philo_nbr];
@@ -32,9 +30,6 @@ static void	philo_init(t_table *table)
 	int		i;
 	t_philo	*philo;
 	
-	if (!table)
-		error_exit("YAPA");
-
 	i = -1;
 	while (++i < table->philo_nbr)
 	{
@@ -54,6 +49,7 @@ void	data_init(t_table *table)
 	int i;
 
 	i = -1;
+	table->threads_running_nbr = 0;
 	table->end_simulation = false;
 	table->all_threads_ready = false;
 	safe_mutex_handle(&table->table_mutex, INIT);

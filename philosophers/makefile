@@ -16,12 +16,13 @@ $(SRC_DIR)init.c \
 $(SRC_DIR)safe_function.c \
 $(SRC_DIR)synchro.c \
 $(SRC_DIR)write.c \
+$(SRC_DIR)monitor.c \
 # Fichiers objets correspondants
 OBJ = $(SRC:.c=.o)
 
 # Compilateur et flags
 CC = cc
-MLX_FLAGS = -L./minilibx -lmlx -lXext -lX11
+FLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
 # Cible par défaut
@@ -30,12 +31,12 @@ all: $(NAME)
 # Créer l'exécutable
 $(NAME): $(OBJ) $(LIBFT) $(FT_PRINTF)
 	@echo "🔨 Linking $(NAME)..."
-	$(CC) $(OBJ) $(LIBFT) $(FT_PRINTF) -o $(NAME)
+	$(CC) $(FLAGS) $(OBJ) $(LIBFT) $(FT_PRINTF) -o $(NAME)
 
 # Règle pour compiler les fichiers objets
 %.o: %.c
 	@echo "💻 Compiling $<"
-	$(CC) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@
 
 # Nettoyer les fichiers objets
 clean:

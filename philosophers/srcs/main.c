@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:57:43 by mgobert           #+#    #+#             */
-/*   Updated: 2025/02/16 15:37:05 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/02/25 17:41:14 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int main (int ac, char **av)
         parse_input (&table, av);
         data_init (&table);
         dinner_start(&table);
-        /* clean(&table); */
+        clean(&table);
     }
     else
     {
         error_exit("Wrong input\n"
-        GREEN"correct is ./philo 2 800 200 200 [5]");
+        G"correct is ./philo 2 800 200 200 [5]");
     }
 }
