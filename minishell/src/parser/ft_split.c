@@ -5,28 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/08 14:57:54 by mgobert           #+#    #+#             */
-/*   Updated: 2025/04/07 21:26:28 by mgobert          ###   ########.fr       */
+/*   Created: 2025/04/24 18:45:22 by mgobert           #+#    #+#             */
+/*   Updated: 2025/05/19 19:18:13 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	free_tab(char **tab, size_t allocated)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < allocated)
-	{
-		free(tab[i]);
-		tab[i] = NULL;
-		i++;
-	}
-	free(tab);
-	tab = NULL;
-	return ;
-}
 
 static char	*allocate_word(char const *s, char c)
 {
@@ -40,7 +24,7 @@ static char	*allocate_word(char const *s, char c)
 	y = 0;
 	while (s[len] && s[len] != c && s[len] != '\n')
 		len++;
-	word = malloc(sizeof(char) * (len + 1));
+	word = malloc(sizeof(char) + (len + 1));
 	if (!word)
 		return (NULL);
 	if (s[i] == ' ')
@@ -90,7 +74,7 @@ static int	set_mem(char **tab, char const *s, char c)
 			tab[i_tab] = allocate_word(s + i, c);
 			if (!tab[i_tab])
 			{
-				free_tab(tab, i_tab);
+				free_tab(tab);
 				return (0);
 			}
 			i_tab++;
@@ -112,7 +96,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = count_words(s, c);
-	tab = malloc(sizeof(char *) * (words + 1));
+	tab = malloc(sizeof(char *) + (words + 1));
 	if (!tab)
 		return (NULL);
 	if (!set_mem(tab, s, c))
@@ -121,4 +105,23 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	}
 	return (tab);
+}
+
+char	*join_path(char *dir, char *cmd)
+{
+	size_t	len_dir;
+	size_t	len_cmd;
+	size_t	total_len;
+	char	*full_path;
+
+	len_dir = ft_strlen(dir);
+	len_cmd = ft_strlen(cmd);
+	total_len = len_dir + 1 + len_cmd + 1;
+	full_path = malloc(total_len + 1);
+	if (!full_path)
+		return (NULL);
+	ft_strcpy(full_path, dir);
+	full_path[len_dir] = '/';
+	ft_strcpy(full_path + len_dir + 1, cmd);
+	return (full_path);
 }

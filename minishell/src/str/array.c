@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   array.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axlleres <axlleres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 18:30:31 by mgobert           #+#    #+#             */
-/*   Updated: 2025/03/24 18:29:16 by mgobert          ###   ########.fr       */
+/*   Created: 2025/04/08 00:23:33 by axlleres          #+#    #+#             */
+/*   Updated: 2025/05/18 15:58:39 by axlleres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int shell_exit(char **args)
+int	msh_array_len(char **array)
 {
-    (void)args;
-    exit(EXIT_SUCCESS);
+	int	i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
 }
 
-int shell_env(char **args)
+void	ft_memcpy(void *dest, const void *src, int len)
 {
-    extern char **environ;
-    (void)args;
-    if (!environ)
-        return (1);
-    for (int i = 0; environ[i]; i++)
-        p("%s\n", environ[i]);
-    return (0);
+	while (len-- > 0)
+		((char *)dest)[len] = ((char *)src)[len];
 }
