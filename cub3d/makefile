@@ -7,6 +7,7 @@ INC_DIR = inc/
 
 # Fichiers source
 SRC = main.c \
+	player.c \
 
 # Fichiers objets correspondants
 OBJ = $(SRC:.c=.o)
@@ -14,7 +15,7 @@ OBJ = $(SRC:.c=.o)
 # Compilateur et flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -I$(INC_DIR) -I./minilibx -I ./libft
-MLX_FLAGS = -L./minilibx -lmlx -lXext -lX11
+MLX_FLAGS = -L./minilibx -lmlx -lXext -lX11 -lm
 RM = rm -f
 
 # Cible par défaut
