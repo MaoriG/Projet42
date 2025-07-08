@@ -3,11 +3,15 @@ NAME = cub3d
 
 # Répertoires
 MLX = ./minilibx/libmlx.a
+GNL = ./get_next_line/get_next_line.a
 INC_DIR = inc/
+SRC_DIR = ./src/
 
 # Fichiers source
-SRC = main.c \
-	player.c \
+SRC = $(SRC_DIR)main.c \
+	  $(SRC_DIR)player.c \
+	  $(SRC_DIR)map.c \
+	  $(SRC_DIR)utils.c \
 
 # Fichiers objets correspondants
 OBJ = $(SRC:.c=.o)

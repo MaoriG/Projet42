@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 16:07:30 by mgobert           #+#    #+#             */
-/*   Updated: 2025/07/04 20:21:06 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/07/08 19:38:55 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include "./minilibx/mlx.h"
 # include "./minilibx/mlx_int.h"
+# include "./get_next_line/get_next_line.h"
 # include "stdbool.h"
 # include "string.h"
 # include <X11/X.h>
@@ -36,6 +37,8 @@
 # define RIGHT 65363
 
 # define PI 3.14159265359
+
+# define debug 0
 
 typedef struct s_player
 {
@@ -62,12 +65,22 @@ typedef struct s_game
     int endian;
     t_player player;
     char **map;
+    int map_height;
+    int map_width;
     
 } t_game;
 
-void init_player(t_player *player);
+void init_player(t_player *player, t_game *game);
 int key_press(int keycode, t_player *player);
 int key_release(int keycode, t_player *player);
 void move_player(t_player *player);
+void move_player_help(t_player *player, int speed, float cos_angle, float sin_angle);
+int	get_map(t_game *game, const char *map_file);
+int	ft_strlen(const char *str);
+char	*ft_strdup(const char *s);
+void	*ft_calloc(size_t num, size_t size);
+void ft_error(char *error);
+int	find_player(t_game *game);
+int	flood_fill_check(char **map, int x, int y);
 
 #endif
