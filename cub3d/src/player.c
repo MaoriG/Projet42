@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:05:53 by mgobert           #+#    #+#             */
-/*   Updated: 2025/07/08 19:40:44 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/07/10 18:13:54 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,21 @@
 
 void init_player(t_player *player, t_game *game)
 {
+    char ** mapcopy;
+    int map_x;
+    int map_y;
+
     if (find_player(game))
-        exit(1);
-    if (!flood_fill_check(game->map, game->player.x, game->player.y))
-        exit(1);   
+        ft_error("Joueur non trouve");
+    map_x = game->player.x / BLOCK;
+    map_y = game->player.y / BLOCK;
+    if (!(mapcopy = copy_map(game->map, game->map_height)))
+        ft_error("Erreur copie de la map");
+    if (flood_fill_check(mapcopy, map_x, map_y))
+    {
+        clean_map(game, mapcopy);
+        ft_error("Error map");
+    }
     player->angle = PI / 2;
     player->key_up = false;
     player->key_down = false;
@@ -25,6 +36,41 @@ void init_player(t_player *player, t_game *game)
     player->key_right = false;
     player->left_rotate = false;
     player->right_rotate = false;
+}
+char **copy_map(char **map, int height)
+{
+    char **copy;
+    int i;
+    
+    i = 0;
+    copy = ft_calloc(sizeof(char *), height + 1);
+    if (!copy)
+        return (NULL);
+    while (i < height)
+    {
+        copy[i] = ft_strdup(map[i]);
+        if (!copy[i])
+        {
+            while (--i >= 0)
+                free(copy[i]);
+            free(copy);
+            return (NULL);
+        }
+        i++;
+    }
+    return (copy);
+}
+void clean_map(t_game *game, char **map)
+{
+    int i;
+
+    i = 0;
+    while(i < game->map_height)
+    {
+        free(map[i]);
+        i++;
+    }
+    free(map);
 }
 
 int key_press(int keycode, t_player *player)

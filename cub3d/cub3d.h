@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 16:07:30 by mgobert           #+#    #+#             */
-/*   Updated: 2025/07/08 19:38:55 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/07/10 18:41:57 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,19 @@ void	*ft_calloc(size_t num, size_t size);
 void ft_error(char *error);
 int	find_player(t_game *game);
 int	flood_fill_check(char **map, int x, int y);
+char **copy_map(char **map, int height);
+void clean_map(t_game *game, char **map);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+void draw_map(t_game *game);
+void draw_line(t_player *player, t_game *game, float start_x, int i);
+int draw_loop (t_game *game);
+void draw_line_help(t_player *player, t_game *game, float ray_x, float ray_y, int i);
+bool touch(float px, float py, t_game *game);
+float fixed_dist(float x1, float y1, float x2, float y2, t_game *game);
+void	ft_count_line(t_game *game, int fd);
+void draw_square(int x, int y, int size, int color, t_game *game);
+void put_pixel(int x, int y, int color, t_game *game);
+void clear_image(t_game *game);
+float distance (float x, float y);
 
 #endif

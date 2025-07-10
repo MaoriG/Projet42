@@ -11,7 +11,9 @@ SRC_DIR = ./src/
 SRC = $(SRC_DIR)main.c \
 	  $(SRC_DIR)player.c \
 	  $(SRC_DIR)map.c \
+	  $(SRC_DIR)raycast.c \
 	  $(SRC_DIR)utils.c \
+	  $(SRC_DIR)utils_help.c \
 
 # Fichiers objets correspondants
 OBJ = $(SRC:.c=.o)

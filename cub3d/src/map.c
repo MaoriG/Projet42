@@ -6,31 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:55:13 by mgobert           #+#    #+#             */
-/*   Updated: 2025/07/08 19:31:58 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/07/10 18:30:36 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-static size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t	src_len;
-	size_t	i;
-
-	src_len = 0;
-	while (src[src_len] != '\0')
-		src_len++;
-	if (size == 0)
-		return (src_len);
-	i = 0;
-	while (i < src_len && i < size - 1)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (src_len);
-}
 
 char	*read_line(int fd)
 {
@@ -60,26 +40,6 @@ char	*read_line(int fd)
 	return (line);
 }
 
-void	ft_count_line(t_game *game, int fd)
-{
-	char	*line;
-	bool	flag;
-
-	game->map_height = 0;
-	game->map_width = 0;
-	flag = true;
-	while (flag)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			flag = false;
-		if (flag)
-			game->map_height++;
-		free(line);
-	}
-	get_next_line(-42);
-}
-
 int	get_map(t_game *game, const char *map_file)
 {
 	int		file;
@@ -106,26 +66,25 @@ int	get_map(t_game *game, const char *map_file)
 	}
 	return (get_next_line(-42), close(file), 0);
 }
-
-int	flood_fill_check(char **map, int x, int y)
+void draw_map(t_game *game)
 {
-	if (x < 0 || y < 0 || map[y] == NULL || map[y][x] == '\0')
-		return (1);
-	if (map[y][x] == '1' || map[y][x] == 'V')
-		return (0);
-	if (map[y][x] != '0' && map[y][x] != 'N')
-		return (1);
-	map[y][x] = 'V';
-	if (flood_fill_check(map, x + 1, y))
-		return (1);
-	if (flood_fill_check(map, x - 1, y))
-		return (1);
-	if (flood_fill_check(map, x, y + 1))
-		return (1);
-	if (flood_fill_check(map, x, y - 1))
-		return (1);
-	return (0);
+    char **map;
+    int color;
+    int y;
+    int x;
+    
+    color = 0x0000FF;
+    map = game->map;
+    y = 0;
+    while (map[y])
+    {
+        x = 0;
+        while (map[y][x])
+        {
+            if (map[y][x] == '1')
+                draw_square(x * BLOCK, y * BLOCK, BLOCK, color, game);
+            x++;
+        }
+        y++;
+    }
 }
-
-
-
