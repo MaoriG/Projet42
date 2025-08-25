@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:55:13 by mgobert           #+#    #+#             */
-/*   Updated: 2025/07/10 18:30:36 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/25 20:34:35 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,25 +66,63 @@ int	get_map(t_game *game, const char *map_file)
 	}
 	return (get_next_line(-42), close(file), 0);
 }
-void draw_map(t_game *game)
+void	draw_map(t_game *game)
 {
-    char **map;
-    int color;
-    int y;
-    int x;
-    
-    color = 0x0000FF;
-    map = game->map;
-    y = 0;
-    while (map[y])
-    {
-        x = 0;
-        while (map[y][x])
-        {
-            if (map[y][x] == '1')
-                draw_square(x * BLOCK, y * BLOCK, BLOCK, color, game);
-            x++;
-        }
-        y++;
-    }
+	char	**map;
+	int		color;
+	int		y;
+	int		x;
+
+	color = 0x0000FF;
+	map = game->map;
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == '1')
+				draw_square(x * BLOCK, y * BLOCK, BLOCK, color, game);
+			x++;
+		}
+		y++;
+	}
+}
+
+char	**copy_map(char **map, int height)
+{
+	char	**copy;
+	int		i;
+
+	i = 0;
+	copy = ft_calloc(sizeof(char *), height + 1);
+	if (!copy)
+		return (NULL);
+	while (i < height)
+	{
+		copy[i] = ft_strdup(map[i]);
+		if (!copy[i])
+		{
+			while (--i >= 0)
+				free(copy[i]);
+			free(copy);
+			return (NULL);
+		}
+		i++;
+	}
+	return (copy);
+}
+void	draw_square(int x, int y, int size, int color, t_game *game)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		put_pixel(x + i, y, color, game);
+		put_pixel(x, y + i, color, game);
+		put_pixel(x + size, y + i, color, game);
+		put_pixel(x + i, y + size, color, game);
+		i++;
+	}
 }
