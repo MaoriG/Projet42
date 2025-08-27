@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:03:56 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/25 20:12:05 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/26 17:58:15 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	clean_map(t_game *game, char **map)
 	}
 	free(map);
 }
+
 void	free_textures(t_game *game)
 {
 	int	i;
@@ -40,8 +41,8 @@ void	free_textures(t_game *game)
 int	exit_game(t_game *game)
 {
 	game->running = false;
-    destroy_game(game);
-    exit(0);
+	destroy_game(game);
+	exit(0);
 	return (0);
 }
 
@@ -52,9 +53,9 @@ void	destroy_game(t_game *game)
 	if (game->map)
 		clean_map(game, game->map);
 	free_textures(game);
-	if (game->img)
+	if (game->img && game->mlx)
 		mlx_destroy_image(game->mlx, game->img);
-	if (game->win)
+	if (game->win && game->mlx)
 		mlx_destroy_window(game->mlx, game->win);
 	if (game->mlx)
 	{
@@ -62,9 +63,21 @@ void	destroy_game(t_game *game)
 		free(game->mlx);
 	}
 }
-void	ft_error(char *error, t_game *game)
+
+void	clear_image(t_game *game)
 {
-	perror(error);
-    destroy_game(game);
-	exit(1);
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < HEIGHT)
+	{
+		x = 0;
+		while (x < WIDTH)
+		{
+			put_pixel(x, y, 0, game);
+			x++;
+		}
+		y++;
+	}
 }

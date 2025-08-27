@@ -2,6 +2,7 @@ NAME = cub3d
 
 MLX = ./minilibx/libmlx.a
 GNL = ./get_next_line/get_next_line.a
+LIBFT = ./libft/libft.a
 INC_DIR = inc/
 SRC_DIR = ./src/
 
@@ -16,6 +17,11 @@ SRC = $(SRC_DIR)main.c \
 	  $(SRC_DIR)cast_ray.c \
 	  $(SRC_DIR)column.c \
 	  $(SRC_DIR)find_player.c \
+	  $(SRC_DIR)move_player.c \
+	  $(SRC_DIR)key.c \
+	  $(SRC_DIR)parse.c \
+	  $(SRC_DIR)parse_file.c \
+	  $(SRC_DIR)read_line.c \
 
 OBJ = $(SRC:.c=.o)
 

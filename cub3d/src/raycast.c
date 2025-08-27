@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 18:31:39 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/25 20:33:51 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/26 20:41:13 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,15 @@
 
 static void	draw_debug(t_game *game, t_player *player)
 {
-	if (debug)
+	t_square	sq;
+
+	if (DEBUG)
 	{
-		draw_square(player->x, player->y, 10, 0x00FF00, game);
+		sq.x = player->x;
+		sq.y = player->y;
+		sq.size = 10;
+		sq.color = 0x00FF00;
+		draw_square(sq, game);
 		draw_map(game);
 	}
 }
@@ -33,9 +39,9 @@ int	draw_loop(t_game *game)
 	player = &game->player;
 	fraction = PI / 3 / WIDTH;
 	start_x = player->angle - PI / 6;
-	move_player(player);
+	move_player(player, game);
 	clear_image(game);
-	draw_floor_ceiling(game);
+	draw_ceiling(game);
 	draw_debug(game, player);
 	i = -1;
 	while (++i < WIDTH)
@@ -61,20 +67,20 @@ bool	touch(float px, float py, t_game *game)
 	return (false);
 }
 
-float	fixed_dist(float x1, float y1, float x2, float y2, t_game *game,
-		float ray_angle)
+float	fixed_dist(t_point p1, t_point p2, t_game *game, float ray_angle)
 {
 	float	delta_x;
 	float	delta_y;
 	float	dist;
 	float	angle_diff;
 
-	delta_x = x2 - x1;
-	delta_y = y2 - y1;
+	delta_x = p2.x - p1.x;
+	delta_y = p2.y - p1.y;
 	dist = sqrt(delta_x * delta_x + delta_y * delta_y);
 	angle_diff = ray_angle - game->player.angle;
 	return (dist * cos(angle_diff));
 }
+
 void	put_pixel(int x, int y, int color, t_game *game)
 {
 	int	index;

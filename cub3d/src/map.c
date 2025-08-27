@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:55:13 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/25 20:34:35 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/27 18:30:34 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ char	*read_line(int fd)
 	len = ft_strlen(c);
 	if (c[len - 1] != '\n')
 		len++;
-	line = ft_calloc(len, sizeof(char) + 1);
+	line = ft_calloc(len + 1, sizeof(char));
 	if (!line)
 	{
 		free(line);
-		perror("Erreur d'allocation mémoire");
+		printf("Error\nMemory allocation\n");
 		return (NULL);
 	}
 	else
@@ -40,40 +40,13 @@ char	*read_line(int fd)
 	return (line);
 }
 
-int	get_map(t_game *game, const char *map_file)
-{
-	int		file;
-	int		map_size;
-	char	*line;
-	int		i;
-
-	file = open(map_file, O_RDONLY);
-	map_size = 0;
-	line = NULL;
-	if (file < 0)
-		return (printf("Erreur d'ouverture du fichier"), 1);
-	ft_count_line(game, file);
-	close(file);
-	file = open(map_file, O_RDONLY);
-	game->map = ft_calloc(sizeof(char *), (game->map_height + 1));
-	if (!game->map)
-		return (close(file), perror("Erreur d'allocation mémoire"), 1);
-	i = 0;
-	while (i < game->map_height)
-	{
-		game->map[i] = read_line(file);
-		i++;
-	}
-	return (get_next_line(-42), close(file), 0);
-}
 void	draw_map(t_game *game)
 {
-	char	**map;
-	int		color;
-	int		y;
-	int		x;
+	char		**map;
+	int			y;
+	int			x;
+	t_square	sq;
 
-	color = 0x0000FF;
 	map = game->map;
 	y = 0;
 	while (map[y])
@@ -82,7 +55,13 @@ void	draw_map(t_game *game)
 		while (map[y][x])
 		{
 			if (map[y][x] == '1')
-				draw_square(x * BLOCK, y * BLOCK, BLOCK, color, game);
+			{
+				sq.x = x * BLOCK;
+				sq.y = y * BLOCK;
+				sq.size = BLOCK;
+				sq.color = 0x0000FF;
+				draw_square(sq, game);
+			}
 			x++;
 		}
 		y++;
@@ -112,17 +91,18 @@ char	**copy_map(char **map, int height)
 	}
 	return (copy);
 }
-void	draw_square(int x, int y, int size, int color, t_game *game)
+
+void	draw_square(t_square sq, t_game *game)
 {
 	int	i;
 
 	i = 0;
-	while (i < size)
+	while (i < sq.size)
 	{
-		put_pixel(x + i, y, color, game);
-		put_pixel(x, y + i, color, game);
-		put_pixel(x + size, y + i, color, game);
-		put_pixel(x + i, y + size, color, game);
+		put_pixel(sq.x + i, sq.y, sq.color, game);
+		put_pixel(sq.x, sq.y + i, sq.color, game);
+		put_pixel(sq.x + sq.size, sq.y + i, sq.color, game);
+		put_pixel(sq.x + i, sq.y + sq.size, sq.color, game);
 		i++;
 	}
 }

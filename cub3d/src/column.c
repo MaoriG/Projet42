@@ -6,18 +6,32 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:17:29 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/25 19:32:10 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/26 17:58:29 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
+static float	ft_fmod(float x, float mod)
+{
+	while (x >= mod)
+		x -= mod;
+	while (x < 0)
+		x += mod;
+	return (x);
+}
+
 static void	init_wall(t_wall *wall, t_column *col)
 {
 	float	plane_dist;
+	t_point	p1;
+	t_point	p2;
 
-	wall->dist = fixed_dist(col->player->x, col->player->y, col->hit_x,
-			col->hit_y, col->game, col->ray_angle);
+	p1.x = col->player->x;
+	p1.y = col->player->y;
+	p2.x = col->hit_x;
+	p2.y = col->hit_y;
+	wall->dist = fixed_dist(p1, p2, col->game, col->ray_angle);
 	plane_dist = (WIDTH / 2.0f) / tan(PI / 6.0f);
 	wall->height = (BLOCK * plane_dist) / wall->dist;
 	wall->start_y = (HEIGHT - wall->height) / 2;
@@ -34,14 +48,20 @@ static void	select_texture(t_wall *wall, t_column *col)
 
 	if (col->side == 0)
 	{
-		wall->tex = (col->hit_x > col->player->x) ? &col->game->textures[2] : &col->game->textures[3];
-		wall_pos = fmod(col->hit_y, BLOCK);
+		if (col->hit_x > col->player->x)
+			wall->tex = &col->game->textures[2];
+		else
+			wall->tex = &col->game->textures[3];
+		wall_pos = ft_fmod(col->hit_y, BLOCK);
 		wall->tex_x = (int)((wall_pos / BLOCK) * wall->tex->width);
 	}
 	else
 	{
-		wall->tex = (col->hit_y > col->player->y) ? &col->game->textures[1] : &col->game->textures[0];
-		wall_pos = fmod(col->hit_x, BLOCK);
+		if (col->hit_y > col->player->y)
+			wall->tex = &col->game->textures[1];
+		else
+			wall->tex = &col->game->textures[0];
+		wall_pos = ft_fmod(col->hit_x, BLOCK);
 		wall->tex_x = (int)((wall_pos / BLOCK) * wall->tex->width);
 	}
 }

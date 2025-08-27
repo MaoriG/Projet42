@@ -6,11 +6,33 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:15:00 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/25 19:31:44 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/26 20:09:19 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+static void	init_ray_help(t_ray *ray)
+{
+	if (ray->dir_x == 0)
+		ray->delta_dist_x = 1e30;
+	else
+	{
+		if (BLOCK / ray->dir_x < 0)
+			ray->delta_dist_x = -(BLOCK / ray->dir_x);
+		else
+			ray->delta_dist_x = BLOCK / ray->dir_x;
+	}
+	if (ray->dir_y == 0)
+		ray->delta_dist_y = 1e30;
+	else
+	{
+		if (BLOCK / ray->dir_y < 0)
+			ray->delta_dist_y = -(BLOCK / ray->dir_y);
+		else
+			ray->delta_dist_y = BLOCK / ray->dir_y;
+	}
+}
 
 static void	init_ray(t_ray *ray, t_player *player, float ray_angle)
 {
@@ -20,8 +42,7 @@ static void	init_ray(t_ray *ray, t_player *player, float ray_angle)
 	ray->dir_y = sin(ray_angle);
 	ray->map_x = (int)(ray->ray_x / BLOCK);
 	ray->map_y = (int)(ray->ray_y / BLOCK);
-	ray->delta_dist_x = (ray->dir_x == 0) ? 1e30 : fabs(BLOCK / ray->dir_x);
-	ray->delta_dist_y = (ray->dir_y == 0) ? 1e30 : fabs(BLOCK / ray->dir_y);
+	init_ray_help(ray);
 	ray->side = -1;
 }
 
@@ -53,29 +74,7 @@ static void	set_ray_steps(t_ray *ray)
 	}
 }
 
-static void	perform_dda(t_ray *ray, t_game *game)
-{
-	while (ray->map_x >= 0 && ray->map_x < game->map_width && ray->map_y >= 0
-		&& ray->map_y < game->map_height)
-	{
-		if (ray->side_dist_x < ray->side_dist_y)
-		{
-			ray->side_dist_x += ray->delta_dist_x;
-			ray->map_x += ray->step_x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist_y += ray->delta_dist_y;
-			ray->map_y += ray->step_y;
-			ray->side = 1;
-		}
-		if (game->map[ray->map_y][ray->map_x] == '1')
-			break ;
-	}
-}
-
-static void	calc_wall_hit(t_ray *ray)
+void	calc_wall_hit(t_ray *ray)
 {
 	if (ray->side == 0)
 		ray->perp_wall_dist = (ray->map_x - ray->ray_x / BLOCK + (1
@@ -94,9 +93,9 @@ void	cast_ray(t_player *player, t_game *game, float ray_angle, int i)
 
 	init_ray(&ray, player, ray_angle);
 	set_ray_steps(&ray);
-	perform_dda(&ray, game);
+	analyse(&ray, game);
 	calc_wall_hit(&ray);
-	if (!debug)
+	if (!DEBUG)
 	{
 		col.player = player;
 		col.game = game;
