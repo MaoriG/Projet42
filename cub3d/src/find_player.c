@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 20:37:58 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/26 20:43:35 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/27 21:43:38 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,24 +74,6 @@ int	find_more_player(t_game *game)
 	return (count);
 }
 
-static int	max_map_width(t_game *game)
-{
-	int	y;
-	int	max;
-	int	base;
-
-	y = 0;
-	max = 0;
-	while (game->map[y])
-	{
-		base = ft_strlen(game->map[y]);
-		if (base > max)
-			max = ft_strlen(game->map[y]);
-		y++;
-	}
-	return (max);
-}
-
 int	find_player(t_game *game)
 {
 	int	y;
@@ -99,7 +81,6 @@ int	find_player(t_game *game)
 
 	y = 0;
 	x = 0;
-	game->map_width = max_map_width(game);
 	if (find_player_help(game))
 	{
 		printf("Player not found\n");

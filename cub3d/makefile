@@ -21,12 +21,13 @@ SRC = $(SRC_DIR)main.c \
 	  $(SRC_DIR)key.c \
 	  $(SRC_DIR)parse.c \
 	  $(SRC_DIR)parse_file.c \
-	  $(SRC_DIR)read_line.c \
+	  $(SRC_DIR)clean_help.c \
+	  $(SRC_DIR)parse_file_help.c \
 
 OBJ = $(SRC:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -I$(INC_DIR) -I./minilibx -I ./libft
+CFLAGS = -Wall -Wextra -Werror -ggdb -I$(INC_DIR) -I./minilibx -I ./libft
 MLX_FLAGS = -L./minilibx -lmlx -lXext -lX11 -lm
 RM = rm -f
 

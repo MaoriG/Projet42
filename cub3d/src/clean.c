@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:03:56 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/26 17:58:15 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 22:02:50 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,22 +62,18 @@ void	destroy_game(t_game *game)
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
 	}
+	if (game->config.no_path)
+		free(game->config.no_path);
+	if (game->config.so_path)
+		free(game->config.so_path);
+	if (game->config.we_path)
+		free(game->config.we_path);
+	if (game->config.ea_path)
+		free(game->config.ea_path);
+	free_gnl_leak();
 }
 
 void	clear_image(t_game *game)
 {
-	int	y;
-	int	x;
-
-	y = 0;
-	while (y < HEIGHT)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			put_pixel(x, y, 0, game);
-			x++;
-		}
-		y++;
-	}
+	ft_bzero(game->data, HEIGHT * game->size_line);
 }

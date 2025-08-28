@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:09:42 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/27 20:55:42 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 21:47:54 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ int	parse_cub_file(t_game *game, char *filename)
 	int		map_size;
 
 	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (printf("Error\nCannot open %s\n", filename), -1);
 	map_lines = NULL;
 	map_size = 0;
+	if (fd < 0)
+		return (printf("Error\nCannot open %s\n", filename), -1);
 	if (read_map_lines(game, fd, &map_lines, &map_size) < 0)
-		return (-1);
+		return (free(map_lines), -1);
 	close(fd);
 	if (!map_lines || map_size == 0)
 		return (printf("Error\nNo map found\n"), -1);
@@ -35,37 +35,23 @@ int	parse_cub_file(t_game *game, char *filename)
 	return (0);
 }
 
-int	read_map_lines(t_game *game, int fd, char ***map_lines, int *map_size)
+int	process_map_line(char ***map, int *size, char *line)
 {
-	char	*line;
-	int		in_map;
-
-	in_map = 0;
-	line = get_next_line(fd);
-	while (line)
+	if (!is_map_line(line))
 	{
-		if (*line != '\n')
-		{
-			if (!in_map && !is_map_line(line))
-			{
-				if (parse_param(game, line) < 0)
-					return (free(line), -1);
-			}
-			else
-			{
-				in_map = 1;
-				if (add_line_to_map(map_lines, line, map_size) < 0)
-					return (free(line), -1);
-			}
-		}
 		free(line);
-		line = get_next_line(fd);
+		return (-1);
 	}
+	if (add_line_to_map(map, line, size) < 0)
+		return (free(line), -1);
 	return (0);
 }
 
 int	add_line_to_map(char ***map_lines, char *line, int *size)
 {
+	char	**new_map;
+	int		i;
+
 	new_map = malloc(sizeof(char *) * (*size + 2));
 	i = 0;
 	if (!new_map)
@@ -106,17 +92,26 @@ int	parse_param(t_game *game, char *line)
 {
 	char	**split;
 	char	*path;
-	int		ret;
+	int		res;
 
-	ret = 0;
 	split = ft_split(line, ' ');
 	if (!split || !split[0] || !split[1])
-		return (printf("Error\nInvalid parameter: %s\n", line), -1);
+	{
+		printf("Error\nInvalid parameter: %s\n", line);
+		free_tab(split);
+		return (-1);
+	}
 	path = ft_strtrim(split[1], " \t\n\r");
-	if (parse_param_help(split, game, path, ret))
+	if (!path || path[0] == '\0')
+	{
+		printf("Error\nInvalid parameter: %s\n", line);
+		free(path);
+		free_tab(split);
 		return (-1);
+	}
+	res = parse_param_help(split, game, path);
 	free_tab(split);
-	if (ret)
-		return (-1);
-	return (0);
+	if (res == 0)
+		return (0);
+	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 18:28:07 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/27 20:40:21 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 15:59:54 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ int	flood_fill_check(char **map, int map_height, int x, int y)
 		return (0);
 	if (map[y][x] != '0' && map[y][x] != 'N' && map[y][x] != 'S'
 		&& map[y][x] != 'E' && map[y][x] != 'W')
-		map[y][x] = 'V';
-	if (flood_fill_check(map, map_height, x + 1, y))
 		return (1);
-	if (flood_fill_check(map, map_height, x - 1, y))
+	map[y][x] = 'V';
+	if (flood_fill_check(map, map_height, x + 1, y) || flood_fill_check(map,
+			map_height, x - 1, y) || flood_fill_check(map, map_height, x, y + 1)
+		|| flood_fill_check(map, map_height, x, y - 1))
+	{
 		return (1);
-	if (flood_fill_check(map, map_height, x, y + 1))
-		return (1);
-	if (flood_fill_check(map, map_height, x, y - 1))
-		return (1);
+	}
 	return (0);
 }
 

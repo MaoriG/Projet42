@@ -6,26 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 18:31:39 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/26 20:41:13 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 21:34:50 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-static void	draw_debug(t_game *game, t_player *player)
-{
-	t_square	sq;
-
-	if (DEBUG)
-	{
-		sq.x = player->x;
-		sq.y = player->y;
-		sq.size = 10;
-		sq.color = 0x00FF00;
-		draw_square(sq, game);
-		draw_map(game);
-	}
-}
 
 int	draw_loop(t_game *game)
 {
@@ -42,7 +27,6 @@ int	draw_loop(t_game *game)
 	move_player(player, game);
 	clear_image(game);
 	draw_ceiling(game);
-	draw_debug(game, player);
 	i = -1;
 	while (++i < WIDTH)
 	{
@@ -83,12 +67,10 @@ float	fixed_dist(t_point p1, t_point p2, t_game *game, float ray_angle)
 
 void	put_pixel(int x, int y, int color, t_game *game)
 {
-	int	index;
+	int	*dst;
 
-	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
+	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
 		return ;
-	index = y * game->size_line + x * game->bpp / 8;
-	game->data[index] = color & 0xFF;
-	game->data[index + 1] = (color >> 8) & 0xFF;
-	game->data[index + 2] = (color >> 16) & 0xFF;
+	dst = (int *)(game->data + y * game->size_line + x * (game->bpp / 8));
+	*dst = color;
 }

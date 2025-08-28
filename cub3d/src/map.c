@@ -6,39 +6,11 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:55:13 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/27 18:30:34 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 20:57:21 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-char	*read_line(int fd)
-{
-	char	*line;
-	int		i;
-	char	*c;
-	int		len;
-
-	line = NULL;
-	i = 0;
-	c = get_next_line(fd);
-	if (!c)
-		return (NULL);
-	len = ft_strlen(c);
-	if (c[len - 1] != '\n')
-		len++;
-	line = ft_calloc(len + 1, sizeof(char));
-	if (!line)
-	{
-		free(line);
-		printf("Error\nMemory allocation\n");
-		return (NULL);
-	}
-	else
-		ft_strlcpy(line, c, len);
-	free(c);
-	return (line);
-}
 
 void	draw_map(t_game *game)
 {
@@ -105,4 +77,43 @@ void	draw_square(t_square sq, t_game *game)
 		put_pixel(sq.x + i, sq.y + sq.size, sq.color, game);
 		i++;
 	}
+}
+
+int	parse_param_color(char **split, t_game *game, char *path)
+{
+	int	color;
+
+	color = parse_color(path);
+	if (color < 0)
+	{
+		free(path);
+		return (1);
+	}
+	if (!ft_strncmp(split[0], "F", 2))
+	{
+		game->config.floor_color = color;
+		free(path);
+		return (0);
+	}
+	if (!ft_strncmp(split[0], "C", 2))
+	{
+		game->config.ceil_color = color;
+		free(path);
+		return (0);
+	}
+	printf("Error\nUnknown identifier: %s\n", split[0]);
+	free(path);
+	return (1);
+}
+
+int	set_path_once(char **dst, char *path, const char *id)
+{
+	if (*dst)
+	{
+		printf("Error\nDuplicate identifier: %s\n", id);
+		free(path);
+		return (1);
+	}
+	*dst = path;
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:05:53 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/26 18:46:13 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 16:03:29 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	init_player(t_player *player, t_game *game)
 		printf("Error\ncopy map\n");
 		return (1);
 	}
-	if (flood_fill_check(mapcopy, map_x, map_y))
+	if (flood_fill_check(mapcopy, game->map_height, map_x, map_y))
 	{
 		clean_map(game, mapcopy);
 		printf("Error\nmap not up to standard\n");

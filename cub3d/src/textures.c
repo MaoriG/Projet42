@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:58:35 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/27 18:44:58 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 16:01:45 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,18 @@ int	load_texture(void *mlx, t_tex *tex, char *path)
 
 static void	draw_floor(t_game *game)
 {
-	int	x;
 	int	y;
+	int	*row;
+	int	x;
 
-	x = 0;
 	y = HEIGHT / 2;
 	while (y < HEIGHT)
 	{
+		row = (int *)(game->data + y * game->size_line);
 		x = 0;
 		while (x < WIDTH)
 		{
-			put_pixel(x, y, game->config.floor_color, game);
+			row[x] = game->config.floor_color;
 			x++;
 		}
 		y++;
@@ -51,16 +52,18 @@ static void	draw_floor(t_game *game)
 
 void	draw_ceiling(t_game *game)
 {
-	int	x;
 	int	y;
+	int	*row;
+	int	x;
 
 	y = 0;
 	while (y < HEIGHT / 2)
 	{
+		row = (int *)(game->data + y * game->size_line);
 		x = 0;
 		while (x < WIDTH)
 		{
-			put_pixel(x, y, game->config.ceil_color, game);
+			row[x] = game->config.ceil_color;
 			x++;
 		}
 		y++;

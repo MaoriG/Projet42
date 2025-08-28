@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:15:00 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/26 20:09:19 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 21:35:28 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,17 +95,12 @@ void	cast_ray(t_player *player, t_game *game, float ray_angle, int i)
 	set_ray_steps(&ray);
 	analyse(&ray, game);
 	calc_wall_hit(&ray);
-	if (!DEBUG)
-	{
-		col.player = player;
-		col.game = game;
-		col.hit_x = ray.hit_x;
-		col.hit_y = ray.hit_y;
-		col.i = i;
-		col.side = ray.side;
-		col.ray_angle = ray_angle;
-		render_column(&col);
-	}
-	else
-		put_pixel((int)ray.hit_x, (int)ray.hit_y, 0xFF0000, game);
+	col.player = player;
+	col.game = game;
+	col.hit_x = ray.hit_x;
+	col.hit_y = ray.hit_y;
+	col.i = i;
+	col.side = ray.side;
+	col.ray_angle = ray_angle;
+	render_column(&col);
 }

@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 19:02:36 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/27 20:40:08 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/08/28 20:57:09 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,28 @@ int	parse_color(char *str)
 	b = ft_atoi(split[2]);
 	free_tab(split);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	{
+		printf("Error\nWrongcolor\n");
 		return (-1);
+	}
 	return ((r << 16) | (g << 8) | b);
 }
 
-int	parse_param_help(char **split, t_game *game, char *path, int ret)
+int	parse_param_help(char **split, t_game *game, char *path)
 {
-	if (!ft_strncmp(split[0], "NO", 2))
-		game->config.no_path = path;
-	else if (!ft_strncmp(split[0], "SO", 2))
-		game->config.so_path = path;
-	else if (!ft_strncmp(split[0], "WE", 2))
-		game->config.we_path = path;
-	else if (!ft_strncmp(split[0], "EA", 2))
-		game->config.ea_path = path;
-	else if (!ft_strncmp(split[0], "F", 2))
-		game->config.floor_color = parse_color(split[1]);
-	else if (!ft_strncmp(split[0], "C", 2))
-		game->config.ceil_color = parse_color(split[1]);
-	else
-	{
-		ret = printf("Error\nUnknown identifier: %s\n", split[0]);
-		free(path);
-	}
-	if (ret)
-		return (1);
-	return (0);
+	if (!ft_strncmp(split[0], "NO", 3))
+		return (set_path_once(&game->config.no_path, path, "NO"));
+	if (!ft_strncmp(split[0], "SO", 3))
+		return (set_path_once(&game->config.so_path, path, "SO"));
+	if (!ft_strncmp(split[0], "WE", 3))
+		return (set_path_once(&game->config.we_path, path, "WE"));
+	if (!ft_strncmp(split[0], "EA", 3))
+		return (set_path_once(&game->config.ea_path, path, "EA"));
+	if (!ft_strncmp(split[0], "F", 2) || !ft_strncmp(split[0], "C", 2))
+		return (parse_param_color(split, game, path));
+	printf("Error\nUnknown identifier: %s\n", split[0]);
+	free(path);
+	return (1);
 }
 
 bool	is_map_line(char *line)
@@ -60,10 +56,10 @@ bool	is_map_line(char *line)
 	int	i;
 
 	i = 0;
-	while (line[i])
+	while (line[i] && line[i] != '\n')
 	{
-		if (line[i] != ' ' && line[i] != '\r' && line[i] != '\n'
-			&& !ft_strchr("01NSEW", line[i]))
+		if (line[i] != '0' && line[i] != '1' && line[i] != 'N' && line[i] != 'S'
+			&& line[i] != 'E' && line[i] != 'W' && line[i] != ' ')
 			return (false);
 		i++;
 	}
