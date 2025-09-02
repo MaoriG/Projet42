@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 21:46:40 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/28 21:47:15 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/02 22:50:01 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	read_map_lines(t_game *g, int fd, char ***map, int *size)
 				else if (parse_param(g, line) < 0)
 					return (free(line), drain_gnl_fd(fd), -1);
 			}
-			if (in_map && process_map_line(map, size, line) < 0)
+			if (in_map && process_map_line(map, size, line, fd) < 0)
 				return (-1);
 		}
 		free(line);

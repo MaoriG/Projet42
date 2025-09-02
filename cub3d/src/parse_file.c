@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:09:42 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/28 21:47:54 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/02 22:50:08 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	parse_cub_file(t_game *game, char *filename)
 	return (0);
 }
 
-int	process_map_line(char ***map, int *size, char *line)
+int	process_map_line(char ***map, int *size, char *line, int fd)
 {
 	if (!is_map_line(line))
 	{
@@ -43,7 +43,7 @@ int	process_map_line(char ***map, int *size, char *line)
 		return (-1);
 	}
 	if (add_line_to_map(map, line, size) < 0)
-		return (free(line), -1);
+		return (free(line), drain_gnl_fd(fd), -1);
 	return (0);
 }
 

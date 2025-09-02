@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:15:00 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/28 21:35:28 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/02 22:55:54 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	init_ray(t_ray *ray, t_player *player, float ray_angle)
 	ray->side = -1;
 }
 
-static void	set_ray_steps(t_ray *ray)
+static void	set_ray(t_ray *ray)
 {
 	if (ray->dir_x < 0)
 	{
@@ -92,7 +92,7 @@ void	cast_ray(t_player *player, t_game *game, float ray_angle, int i)
 	t_column	col;
 
 	init_ray(&ray, player, ray_angle);
-	set_ray_steps(&ray);
+	set_ray(&ray);
 	analyse(&ray, game);
 	calc_wall_hit(&ray);
 	col.player = player;

@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 16:07:30 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/28 22:02:05 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/02 22:50:16 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ int				read_map_lines(t_game *g, int fd, char ***map, int *size);
 
 // parse_file
 int				parse_cub_file(t_game *game, char *filename);
-int				process_map_line(char ***map, int *size, char *line);
+int				process_map_line(char ***map, int *size, char *line, int fd);
 int				add_line_to_map(char ***map_lines, char *line, int *size);
 void			set_map_dimensions(t_game *game);
 int				parse_param(t_game *game, char *line);
