@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:09:42 by mgobert           #+#    #+#             */
-/*   Updated: 2025/09/02 22:50:08 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/03 16:03:49 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ int	parse_cub_file(t_game *game, char *filename)
 	int		map_size;
 
 	fd = open(filename, O_RDONLY);
+	game->fd = fd;
 	map_lines = NULL;
 	map_size = 0;
 	if (fd < 0)
 		return (printf("Error\nCannot open %s\n", filename), -1);
 	if (read_map_lines(game, fd, &map_lines, &map_size) < 0)
-		return (free(map_lines), -1);
+		return (free_map(map_lines), -1);
 	close(fd);
 	if (!map_lines || map_size == 0)
 		return (printf("Error\nNo map found\n"), -1);
@@ -35,6 +36,7 @@ int	parse_cub_file(t_game *game, char *filename)
 	return (0);
 }
 
+
 int	process_map_line(char ***map, int *size, char *line, int fd)
 {
 	if (!is_map_line(line))
@@ -43,7 +45,7 @@ int	process_map_line(char ***map, int *size, char *line, int fd)
 		return (-1);
 	}
 	if (add_line_to_map(map, line, size) < 0)
-		return (free(line), drain_gnl_fd(fd), -1);
+		return (free(line), drain_gnl_fd(fd), free_map(*map), -1);
 	return (0);
 }
 
@@ -55,10 +57,7 @@ int	add_line_to_map(char ***map_lines, char *line, int *size)
 	new_map = malloc(sizeof(char *) * (*size + 2));
 	i = 0;
 	if (!new_map)
-	{
-		printf("Error: Memory allocation failed\n");
-		return (-1);
-	}
+		return (printf("Error: Memory allocation failed\n"),-1);
 	while (i < *size)
 	{
 		new_map[i] = (*map_lines)[i];

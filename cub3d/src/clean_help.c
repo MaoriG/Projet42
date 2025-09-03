@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 18:19:06 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/28 21:02:03 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/03 16:04:38 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,17 @@ void	drain_gnl_fd(int fd)
 	}
 }
 
-void	free_gnl_leak(void)
+void	free_map(char **map)
 {
-	int		fd;
-	char	*line;
+	int i;
 
-	fd = open("/dev/null", O_RDONLY);
-	line = get_next_line(fd);
-	if (line)
-		free(line);
-	close(fd);
+	if (!map)
+		return;
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
 }

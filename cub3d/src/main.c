@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 16:13:54 by mgobert           #+#    #+#             */
-/*   Updated: 2025/09/02 23:18:03 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/03 15:38:45 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int    ispathok(char *str)
 	int i;
 	int j;
 
+	if  (str == NULL)
+		return (1);
     pber = ".cub";
     i = ft_strlen(str) - 1;
     j = 0;
@@ -87,7 +89,7 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 		return (printf("Error\nUsage: ./cub3d map.cub\n"), 1);
-	if (!ispathok(av[2]))
+	if (!ispathok(av[1]))
 		return (printf("Error\nUsage: ./cub3d map.cub\n"), 1);
 	ft_bzero(&game, sizeof(t_game));
 	ret = init_game(&game, av[1]);

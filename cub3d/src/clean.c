@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:03:56 by mgobert           #+#    #+#             */
-/*   Updated: 2025/08/28 22:02:50 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/03 16:04:20 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	destroy_game(t_game *game)
 		free(game->config.we_path);
 	if (game->config.ea_path)
 		free(game->config.ea_path);
-	free_gnl_leak();
+	drain_gnl_fd(game->fd);
 }
 
 void	clear_image(t_game *game)

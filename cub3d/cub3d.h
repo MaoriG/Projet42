@@ -6,7 +6,7 @@
 /*   By: mgobert <mgobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 16:07:30 by mgobert           #+#    #+#             */
-/*   Updated: 2025/09/02 22:50:16 by mgobert          ###   ########.fr       */
+/*   Updated: 2025/09/03 16:04:45 by mgobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct s_game
 	t_tex		textures[4];
 	bool		running;
 	t_config	config;
+	int fd;
 
 }				t_game;
 
@@ -174,7 +175,7 @@ void			cast_ray(t_player *player, t_game *game, float ray_angle,
 
 // clean_help
 void			drain_gnl_fd(int fd);
-void			free_gnl_leak(void);
+void	free_map(char **map);
 
 // clean
 void			clean_map(t_game *game, char **map);
