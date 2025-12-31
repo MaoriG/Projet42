@@ -15,7 +15,7 @@ COPY conf/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 
-WORKDIR /var/www/htlm
+WORKDIR /var/www/html
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm8.2", "-F"]
