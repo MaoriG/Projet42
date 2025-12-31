@@ -1,0 +1,5 @@
+CREATE DATABASE IF NOT EXISTS wordpress;
+CREATE USER IF NOT EXISTS 'mgobert'@'%' IDENTIFIED BY 'mdp';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'mgobert'@'%';
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'mdproot';
+FLUSH PRIVILEGES;
